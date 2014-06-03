@@ -1,6 +1,6 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.mycompany.mygame;
+package com.bigbawb.village;
 
 public final class BuildConfig {
-    public final static boolean DEBUG = true;
+    public final static boolean DEBUG = false;
 }

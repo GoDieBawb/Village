@@ -72,8 +72,8 @@ public class InteractionManager extends AbstractAppState implements ActionListen
       
     if (binding.equals("Click") && !isPressed) {
       
-      if (!player.hasSwung)
-      player.swing(stateManager);
+      //if (!player.hasSwung)
+      //player.swing(stateManager);
       }
 
     if (binding.equals("Left")) {
@@ -138,7 +138,7 @@ public class InteractionManager extends AbstractAppState implements ActionListen
         } else {
             player.idle();
         }
-       player.playerPhys.setWalkDirection(walkDirection.mult(1));
+       player.playerPhys.setWalkDirection(walkDirection.mult(player.speedMult));
        player.playerPhys.setViewDirection(camDir);
 
     }

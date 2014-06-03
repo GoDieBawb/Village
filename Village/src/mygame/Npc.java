@@ -124,7 +124,7 @@ public class Npc extends Node {
     player.stealWarn = true;
     }
     
-    if(player.hasMeat) {
+    if(player.hasMeat ^ player.gaveMeat) {
     player.hasMeat = false;
     player.gaveMeat = true;
     questStep = 5;

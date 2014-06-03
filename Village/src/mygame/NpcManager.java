@@ -161,7 +161,28 @@ public class NpcManager extends AbstractAppState {
   @Override
   public void update(float tpf){
     
-
+    if (player.hasDog){
+      Npc dog = (Npc) npcNode.getChild("Dog");
+      float distance = dog.getWorldTranslation().distance(player.getWorldTranslation());
+      System.out.println(distance);
+      
+      if (distance > 10){
+        dog.npcPhys.warp(player.getWorldTranslation().add(0, 3, 0));
+        }
+      
+      else if (distance > 1){
+        dog.npcPhys.setWalkDirection(player.model.getWorldTranslation().subtract(dog.model.getWorldTranslation()));
+        if (!dog.armChannel.getAnimationName().equals("walk"))
+        dog.armChannel.setAnim("walk");
+        }
+      
+      else {
+        dog.npcPhys.setWalkDirection(new Vector3f(0, 0, 0));
+        if (!dog.armChannel.getAnimationName().equals("sit_idle"))
+        dog.armChannel.setAnim("sit_idle");
+        }
+      
+      }
       
     for (int i = 0; i < npcNode.getQuantity(); i++) {
       

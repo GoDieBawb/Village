@@ -1,6 +1,13 @@
-package com.mycompany.mygame;
+package com.bigbawb.village;
  
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.jme3.app.AndroidHarness;
 import com.jme3.system.android.AndroidConfigChooser.ConfigType;
 import java.util.logging.Level;
@@ -15,6 +22,8 @@ public class MainActivity extends AndroidHarness{
      * to get error checks and code completion for the Android project files.
      */
  
+    private AdView adView;
+    
     public MainActivity(){
         // Set the application class to run
         appClass = "mygame.Main";
@@ -32,5 +41,36 @@ public class MainActivity extends AndroidHarness{
         // Set the default logging level (default=Level.INFO, Level.ALL=All Debug Info)
         LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
     }
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adView = new AdView(this);
+        adView.setAdSize(AdSize.SMART_BANNER);
+        adView.setAdUnitId("ca-app-pub-9434547190848397/8975012269");
+        adView.buildLayer();
+ 
+        LinearLayout ll = new LinearLayout(this);
+        ll.setGravity(Gravity.BOTTOM);
+        ll.addView(adView);
+        addContentView(ll, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        
+        AdRequest adRequest = new AdRequest.Builder()
+        .build();
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest);
+        adView.bringToFront();
+        adView.requestFocus();
+        
+        }
+        
+    
+    @Override
+    public void onDestroy() {
+      super.onDestroy();
+      System.runFinalization();
+      android.os.Process.killProcess(android.os.Process.myPid());
+      }
  
 }

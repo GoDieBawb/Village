@@ -46,7 +46,7 @@ public class PlayerManager extends AbstractAppState {
     player.animControl = player.model.getChild("Person").getControl(AnimControl.class);
     player.armChannel  = player.animControl.createChannel();
     player.legChannel  = player.animControl.createChannel();
-    player.playerPhys  = new BetterCharacterControl(.5f, 1.5f, 100f);
+    player.playerPhys  = new BetterCharacterControl(.4f, 1.3f, 100f);
     
     TextureKey key     = new TextureKey("Models/Person/Person.png", true);
     Texture tex        = assetManager.loadTexture(key);
@@ -62,10 +62,11 @@ public class PlayerManager extends AbstractAppState {
     player.legChannel.setAnim("LegsIdle");
     
     physics.getPhysicsSpace().add(player.playerPhys);
-    player.playerPhys.warp(new Vector3f(-25, 3, 35));
+    player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
     player.scale(.3f, .35f, .3f);
     player.model.setMaterial(mat);
     player.attachChild(player.model);
+    player.model.setLocalTranslation(0, -.1f, 0);
         
     this.app.getRootNode().attachChild(player);
     }
@@ -79,7 +80,14 @@ public class PlayerManager extends AbstractAppState {
     
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
     player.hasSwung = false;
-        
+      
+    if (player.getLocalTranslation().y < -5){
+      player.playerPhys.warp(new Vector3f(45, 1, 38));
+      stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+      }
+    
     }
+  
+   
   
   }

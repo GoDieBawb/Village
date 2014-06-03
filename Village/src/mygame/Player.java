@@ -35,7 +35,7 @@ public class Player extends Node {
   public boolean     hasWood;
   public boolean     hamCooked;
   public boolean     hasHam;
-  public boolean     hasDog = true;
+  public boolean     hasDog;
   public boolean     gaveDog;
   public boolean     stealWarn;
   public boolean     hasMeat;
@@ -44,6 +44,8 @@ public class Player extends Node {
   
     
   public void swing(AppStateManager stateManager) {
+    
+    if (!hasSwung){
     armChannel.setAnim("ArmSwing");
     armChannel.setSpeed(2);
     armChannel.setLoopMode(LoopMode.DontLoop);
@@ -61,6 +63,7 @@ public class Player extends Node {
     else
     stateManager.getState(GuiManager.class).showAlert("Interact", "Nothing interesting here...");
     
+    }
   }
   
   private void getItem(CollisionResults results, AppStateManager stateManager){

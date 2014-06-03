@@ -14,6 +14,7 @@ import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.texture.Texture;
+import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.controls.extras.android.Joystick;
 import tonegod.gui.controls.windows.AlertBox;
 import tonegod.gui.core.Screen;
@@ -32,6 +33,7 @@ public class GuiManager extends AbstractAppState {
   private Screen            screen;
   private Joystick          stick;
   private Player            player;
+  private ButtonAdapter     interactButton;
   
   @Override
   public void initialize(AppStateManager stateManager, Application app){
@@ -45,8 +47,26 @@ public class GuiManager extends AbstractAppState {
     screen.setUseMultiTouch(true);
     this.app.getGuiNode().addControl(screen);
     this.app.getInputManager().setSimulateMouse(true);
+    initInteractButton();
     initAlertBox();
-    //initJoyStick();
+    initJoyStick();
+    }
+  
+  private void initInteractButton(){
+    interactButton = new ButtonAdapter( screen, "InteractButton", new Vector2f(15, 15) ) {
+    
+    @Override
+      public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
+        player.swing(this.app.getStateManager());
+        }
+      };
+    
+    interactButton.setDimensions(screen.getWidth()/8, screen.getHeight()/10);
+    interactButton.setPosition(screen.getWidth() / 1.1f - interactButton.getHeight(), screen.getHeight() / 1.1f - interactButton.getHeight());
+    interactButton.setFont("Interface/Fonts/Impact.fnt");
+    interactButton.setText("Check");
+    screen.addElement(interactButton);
+    
     }
   
   private void initAlertBox(){
@@ -75,7 +95,7 @@ public class GuiManager extends AbstractAppState {
     }
 
   private void initJoyStick(){
-    stick = new Joystick(screen, Vector2f.ZERO, (int)70) {
+    stick = new Joystick(screen, Vector2f.ZERO, (int)(screen.getWidth()/6)) {
     @Override
     public void onUpdate(float tpf, float deltaX, float deltaY) {
         float dzVal = .2f; // Dead zone threshold
@@ -115,7 +135,7 @@ public class GuiManager extends AbstractAppState {
       stick.setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
       stick.getThumb().setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
       screen.addElement(stick, true);
-      stick.setPosition(screen.getWidth()/10 - stick.getWidth()/2, screen.getHeight()/10 - stick.getHeight()/2);
+      stick.setPosition(screen.getWidth()/10 - stick.getWidth()/2, screen.getHeight() / 10f - interactButton.getHeight()/5);
       // Add some fancy effects
       Effect fxIn = new Effect(Effect.EffectType.FadeIn, Effect.EffectEvent.Show,.5f);
       stick.addEffect(fxIn);

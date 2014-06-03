@@ -16,6 +16,9 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+    this.setShowSettings(false);
+    this.setDisplayFps(false);
+    this.setDisplayStatView(false);
     this.getStateManager().attach(new SceneManager());
     this.getStateManager().attach(new PlayerManager());
     this.getStateManager().attach(new InteractionManager());
