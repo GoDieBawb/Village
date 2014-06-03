@@ -62,7 +62,8 @@ public class PlayerManager extends AbstractAppState {
     player.legChannel.setAnim("LegsIdle");
     
     physics.getPhysicsSpace().add(player.playerPhys);
-    player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
+    //player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
+    player.playerPhys.warp(new Vector3f(new Vector3f(26, 1, -3)));
     player.scale(.3f, .35f, .3f);
     player.model.setMaterial(mat);
     player.attachChild(player.model);

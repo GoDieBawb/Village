@@ -64,11 +64,15 @@ public class InteractionManager extends AbstractAppState implements ActionListen
     
     if (binding.equals("Inventory")) {
       inv = isPressed;
-      if (isPressed)
+      if (isPressed){
       inputManager.setCursorVisible(true);
-      else
+      stateManager.getState(CameraManager.class).cam.setDragToRotate(true);
+      }
+      else {
       inputManager.setCursorVisible(false);
-      }  
+      stateManager.getState(CameraManager.class).cam.setDragToRotate(false);
+      }
+    }  
       
     if (binding.equals("Click") && !isPressed) {
       
@@ -139,7 +143,7 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             player.idle();
         }
         
-       player.playerPhys.setWalkDirection(walkDirection.mult(player.speedMult));
+       player.playerPhys.setWalkDirection(walkDirection.mult(1));
        player.playerPhys.setViewDirection(camDir);
 
     }

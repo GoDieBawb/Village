@@ -51,7 +51,7 @@ public class NpcManager extends AbstractAppState {
   private void initPriest(){
     Npc priest         = new Npc();
     priest.model       = (Node) assetManager.loadModel("Models/Person/Person.j3o");
-    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    TextureKey key     = new TextureKey("Models/Person/Priest.png", true);
     Texture tex        = assetManager.loadTexture(key);
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", tex);
@@ -79,7 +79,7 @@ public class NpcManager extends AbstractAppState {
   private void initBlacksmith(){
     Npc blackSmith         = new Npc();
     blackSmith.model       = (Node) assetManager.loadModel("Models/Person/Person.j3o");
-    TextureKey key         = new TextureKey("Models/Person/Person.png", true);
+    TextureKey key         = new TextureKey("Models/Person/BlackSmith.png", true);
     Texture tex            = assetManager.loadTexture(key);
     Material mat           = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", tex);
