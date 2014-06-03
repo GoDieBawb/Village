@@ -124,6 +124,10 @@ public class Npc extends Node {
     player.stealWarn = true;
     }
     
+    if (player.stealWarn) {
+    questStep = 4;
+    }
+    
     if(player.hasMeat ^ player.gaveMeat) {
     player.hasMeat = false;
     player.gaveMeat = true;
@@ -136,9 +140,9 @@ public class Npc extends Node {
     }
   
   private void dogQuest(Player player){
-    if (player.hasHam){
+    if (player.hasHam && !player.gaveDog) {
       player.hasDog = true;
-      questStep = 2;
+      questStep = 2;      
       }
     }
   

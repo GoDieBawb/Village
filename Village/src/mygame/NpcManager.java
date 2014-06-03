@@ -161,6 +161,10 @@ public class NpcManager extends AbstractAppState {
   @Override
   public void update(float tpf){
     
+    if (npcNode.getChild("Dog") != null && player.stealWarn){
+    npcNode.getChild("Dog").removeFromParent();
+    }
+      
     if (player.hasDog){
       Npc dog = (Npc) npcNode.getChild("Dog");
       float distance = dog.getWorldTranslation().distance(player.getWorldTranslation());
