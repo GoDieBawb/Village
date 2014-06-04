@@ -28,7 +28,7 @@ public class NpcManager extends AbstractAppState {
   private SimpleApplication app;
   private AppStateManager   stateManager;
   private AssetManager      assetManager;
-  private Node              npcNode;
+  public  Node              npcNode;
   private BulletAppState    physics;
   private Player            player;
   

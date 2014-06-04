@@ -17,7 +17,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
-import jme3tools.optimize.GeometryBatchFactory;
 
 /**
  *
@@ -26,7 +25,6 @@ import jme3tools.optimize.GeometryBatchFactory;
 public class SceneManager extends AbstractAppState{
 
   private SimpleApplication app;
-  private AppStateManager   stateManager;
   private AssetManager      assetManager;
   public  Node              scene;
   public  BulletAppState    physics;
@@ -35,7 +33,6 @@ public class SceneManager extends AbstractAppState{
   public void initialize(AppStateManager stateManager, Application app){
     super.initialize(stateManager, app);
     this.app          = (SimpleApplication) app;
-    this.stateManager = this.app.getStateManager();
     this.assetManager = this.app.getAssetManager();
     physics           = new BulletAppState();
     stateManager.attach(physics);
@@ -44,20 +41,26 @@ public class SceneManager extends AbstractAppState{
     }
   
   private void initScene(){
-    Material mat        = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     scene               = (Node) assetManager.loadModel("Scenes/Village.j3o");
     RigidBodyControl scenePhys = new RigidBodyControl(0f);
-    
-    //GeometryBatchFactory.optimize(scene, true);
-    
-    //scene.setMaterial(mat);
-    Node walls = (Node) scene.getChild("Walls");
 
     
     scene.addControl(scenePhys);
     physics.getPhysicsSpace().add(scenePhys);
     
     this.app.getRootNode().attachChild(scene);
+    }
+  
+  public void initSceneTwo(){
+    physics.getPhysicsSpace().removeAll(scene);
+    scene               = (Node) assetManager.loadModel("Scenes/SceneTwo.j3o");
+    RigidBodyControl scenePhys = new RigidBodyControl(0f);
+    
+    scene.addControl(scenePhys);
+    physics.getPhysicsSpace().add(scenePhys);
+    
+    this.app.getRootNode().attachChild(scene);
+    makeUnshaded();
     }
   
   private void makeUnshaded(){
@@ -72,6 +75,7 @@ public class SceneManager extends AbstractAppState{
         Geometry geom = (Geometry) spatial;
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         System.out.println(geom.getMaterial().getTextureParam("DiffuseMap"));
+        if (geom.getMaterial().getTextureParam("DiffuseMap") != null)
         mat.setTexture("ColorMap", geom.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
         geom.setMaterial(mat);
        

@@ -16,6 +16,7 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 
 /**
@@ -62,8 +63,9 @@ public class PlayerManager extends AbstractAppState {
     player.legChannel.setAnim("LegsIdle");
     
     physics.getPhysicsSpace().add(player.playerPhys);
-    //player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
-    player.playerPhys.warp(new Vector3f(new Vector3f(26, 1, -3)));
+    player.playerPhys.setGravity(new Vector3f(0, -20.81f, 0));
+    player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
+    //player.playerPhys.warp(new Vector3f(new Vector3f(26, 1, -3)));
     player.scale(.3f, .35f, .3f);
     player.model.setMaterial(mat);
     player.attachChild(player.model);
@@ -72,19 +74,37 @@ public class PlayerManager extends AbstractAppState {
     this.app.getRootNode().attachChild(player);
     }
   
+  private void initLevelTwo(){
+    app.getRootNode().detachAllChildren();
+    app.getRootNode().attachChild(player);
+    
+    stateManager.getState(NpcManager.class).npcNode.detachAllChildren();
+    stateManager.getState(SceneManager.class).initSceneTwo();
+    stateManager.getState(GuiManager.class).showAlert("Murder", "You close the door behind you...");
+    physics.getPhysicsSpace().add(player.playerPhys);
+    player.playerPhys.warp(new Vector3f(new Vector3f(-5, 1, -3)));
+    player.model.setCullHint(Spatial.CullHint.Never);
+    
+    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    Texture tex        = assetManager.loadTexture(key);
+    Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    
+    mat.setTexture("ColorMap", tex);
+    player.model.setMaterial(mat);
+    }
+  
   @Override
   public void update(float tpf){
-
-    if (!player.playerPhys.isOnGround() && player.getWorldTranslation().y > 1) {
-     // player.playerPhys.warp(player.getWorldTranslation().subtract(0, .005f, 0));
-      }
     
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
     player.hasSwung = false;
       
-    if (player.getLocalTranslation().y < -5){
+    if (player.getLocalTranslation().y < -5 && !player.isDone){
       player.playerPhys.warp(new Vector3f(45, 1, 38));
       stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+      
+      } else if (player.getLocalTranslation().y < -5 && player.isDone) {
+      initLevelTwo();
       }
     
     }

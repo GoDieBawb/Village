@@ -40,7 +40,7 @@ public class Player extends Node {
   public boolean     stealWarn;
   public boolean     hasMeat;
   public boolean     gaveMeat;
-  public boolean     isDone;
+  public boolean     isDone = true;
   
     
   public void swing(AppStateManager stateManager) {
