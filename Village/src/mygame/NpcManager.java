@@ -158,7 +158,8 @@ public class NpcManager extends AbstractAppState {
     npcNode.attachChild(dog);
     }
   
-  public void initVictim(){
+  public void initVictim() {
+      
     Npc victim      = new Npc();
     victim.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
     TextureKey key     = new TextureKey("Models/Person/Person.png", true);
@@ -184,6 +185,7 @@ public class NpcManager extends AbstractAppState {
     physics.getPhysicsSpace().add(victim.npcPhys);
     victim.npcPhys.warp(new Vector3f(-2, 1, 2));
     npcNode.attachChild(victim);
+    
     }
   
   public void dogChecker(){

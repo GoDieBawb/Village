@@ -74,7 +74,6 @@ public class SceneManager extends AbstractAppState{
         
         Geometry geom = (Geometry) spatial;
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        System.out.println(geom.getMaterial().getTextureParam("DiffuseMap"));
         if (geom.getMaterial().getTextureParam("DiffuseMap") != null)
         mat.setTexture("ColorMap", geom.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
         geom.setMaterial(mat);

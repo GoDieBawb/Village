@@ -52,12 +52,14 @@ public class InteractionManager extends AbstractAppState implements ActionListen
     inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
     inputManager.addMapping("Click", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
     inputManager.addMapping("Inventory", new KeyTrigger(KeyInput.KEY_E));
+    inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
     inputManager.addListener(this, "Up");
     inputManager.addListener(this, "Down");
     inputManager.addListener(this, "Left");
     inputManager.addListener(this, "Right");
     inputManager.addListener(this, "Click");
     inputManager.addListener(this, "Inventory");
+    inputManager.addListener(this, "Space");
     }
 
   public void onAction(String binding, boolean isPressed, float tpf) {
@@ -72,12 +74,12 @@ public class InteractionManager extends AbstractAppState implements ActionListen
       inputManager.setCursorVisible(false);
       stateManager.getState(CameraManager.class).cam.setDragToRotate(false);
       }
-    }  
+    }
       
-    if (binding.equals("Click") && !isPressed) {
+    if (binding.equals("Space") && !isPressed) {
       
-      //if (!player.hasSwung)
-      //player.swing(stateManager);
+      if (!player.hasSwung)
+      player.swing(stateManager);
       }
 
     if (binding.equals("Left")) {

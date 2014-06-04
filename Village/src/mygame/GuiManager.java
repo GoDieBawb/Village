@@ -49,7 +49,7 @@ public class GuiManager extends AbstractAppState {
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
     initAlertBox();
-    //initJoyStick();
+    initJoyStick();
     }
   
   private void initInteractButton(){
@@ -63,7 +63,7 @@ public class GuiManager extends AbstractAppState {
     
     interactButton.setDimensions(screen.getWidth()/8, screen.getHeight()/10);
     interactButton.setPosition(screen.getWidth() / 1.1f - interactButton.getHeight(), screen.getHeight() / 1.1f - interactButton.getHeight());
-    interactButton.setFont("Interface/Fonts/Impact.fnt");
+    //interactButton.setFont("Interface/Fonts/Impact.fnt");
     interactButton.setText("Check");
     screen.addElement(interactButton);
     

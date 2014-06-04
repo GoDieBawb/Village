@@ -373,7 +373,7 @@ public class Player extends Node {
         item.removeFromParent();
         
         } else {
-        gui.showAlert("Interact", "This seems to be the only tree left..."); 
+        gui.showAlert("Interact", "This seems to be the only tree left... You'll need an axe to cut it"); 
         }  
         
       }

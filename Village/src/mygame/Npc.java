@@ -239,7 +239,7 @@ public class Npc extends Node {
       text = "Thanks for bringing me those mushrooms! Feel free to borrow my tools.";
       }
 
-    else if (questStep == 3) {
+    else if (questStep == 4) {
       text = "Remember... Never go out in the graveyard, strange demons haunt that place.";
       }
     

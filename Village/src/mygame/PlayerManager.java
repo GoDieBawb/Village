@@ -109,6 +109,7 @@ public class PlayerManager extends AbstractAppState {
     player.hasSwung = false;
       
     if (player.getLocalTranslation().y < -5 && !player.isDone){
+      
       player.playerPhys.warp(new Vector3f(45, 1, 38));
       stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
       
