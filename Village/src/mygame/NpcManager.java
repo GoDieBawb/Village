@@ -158,9 +158,35 @@ public class NpcManager extends AbstractAppState {
     npcNode.attachChild(dog);
     }
   
-  @Override
-  public void update(float tpf){
+  public void initVictim(){
+    Npc victim      = new Npc();
+    victim.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
+    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    Texture tex        = assetManager.loadTexture(key);
+    Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    mat.setTexture("ColorMap", tex);
+
+    victim.npcPhys     = new BetterCharacterControl(.5f, 1.5f, 100f);
+    victim.animControl = victim.model.getChild("Person").getControl(AnimControl.class);
+    victim.armChannel  = victim.animControl.createChannel();
+    victim.legChannel  = victim.animControl.createChannel();
+      
+    victim.addControl(victim.npcPhys);
+    victim.model.setMaterial(mat);
+      
+    victim.armChannel.setAnim("ArmIdle");
+    victim.legChannel.setAnim("LegsIdle");
     
+    victim.attachChild(victim.model);
+    victim.scale(.3f, .35f, .3f);
+    victim.setName("Victim");
+    
+    physics.getPhysicsSpace().add(victim.npcPhys);
+    victim.npcPhys.warp(new Vector3f(-2, 1, 2));
+    npcNode.attachChild(victim);
+    }
+  
+  public void dogChecker(){
     if (npcNode.getChild("Dog") != null && player.stealWarn){
     npcNode.getChild("Dog").removeFromParent();
     }
@@ -187,6 +213,12 @@ public class NpcManager extends AbstractAppState {
         }
       
       }
+    }
+  
+  @Override
+  public void update(float tpf){
+    
+    dogChecker();
       
     for (int i = 0; i < npcNode.getQuantity(); i++) {
       

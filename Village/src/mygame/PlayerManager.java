@@ -75,22 +75,31 @@ public class PlayerManager extends AbstractAppState {
     }
   
   private void initLevelTwo(){
+      
     app.getRootNode().detachAllChildren();
     app.getRootNode().attachChild(player);
     
     stateManager.getState(NpcManager.class).npcNode.detachAllChildren();
     stateManager.getState(SceneManager.class).initSceneTwo();
-    stateManager.getState(GuiManager.class).showAlert("Murder", "You close the door behind you...");
+    app.getRootNode().attachChild(stateManager.getState(NpcManager.class).npcNode);
+    stateManager.getState(NpcManager.class).initVictim();
+    
     physics.getPhysicsSpace().add(player.playerPhys);
     player.playerPhys.warp(new Vector3f(new Vector3f(-5, 1, -3)));
     player.model.setCullHint(Spatial.CullHint.Never);
+    player.level = 2;
     
-    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    TextureKey key     = new TextureKey("Models/Person/Priest.png", true);
     Texture tex        = assetManager.loadTexture(key);
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     
     mat.setTexture("ColorMap", tex);
     player.model.setMaterial(mat);
+    player.questStep = "FindScythe";
+    
+    stateManager.getState(AudioManager.class).playSong(2);
+    stateManager.getState(GuiManager.class).showAlert("Reaper", "You close the door behind you...");
+    stateManager.getState(AudioManager.class).playSound("Door");
     }
   
   @Override

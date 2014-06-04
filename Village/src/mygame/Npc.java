@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.scene.Node;
 
@@ -75,7 +76,33 @@ public class Npc extends Node {
     text = setDogSpeech();
     }
     
+    if (this.getName().equals("Victim")){
+    victimQuest(player);
+    text =  setVictimSpeech();
+    }
+    
     return text;
+    }
+  
+  
+  private void victimQuest(Player player){
+    
+    if (player.questStep.equals("Murder")) {
+    questStep = 2;
+    player.questStep = "FindCrate";
+    }
+    
+    else if (player.questStep.equals("FindCrate") ^ player.questStep.equals("FindSaw"))
+    questStep = 3;
+
+    else if (player.questStep.equals("HideBody")){
+    questStep = 4; 
+    this.removeFromParent();
+    }
+    
+    else if (player.questStep.equals("LeaveHouse"))
+    questStep = 5;    
+
     }
   
   private void blacksmithQuest(Player player){
@@ -106,8 +133,10 @@ public class Npc extends Node {
     }
     
     if (player.gaveMeat) {
+    AudioNode sound = (AudioNode) player.getParent().getChild("Laugh");
     questStep = 6;
     player.isDone = true;
+    sound.playInstance();
     }
      
     }
@@ -144,6 +173,26 @@ public class Npc extends Node {
       player.hasDog = true;
       questStep = 2;      
       }
+    }
+  
+  private String setVictimSpeech(){
+    String text = new String();
+    
+    if (questStep == 2)
+    text = "Your victim screams as the scythe cuts him...";
+    
+    else if (questStep == 3)
+    text = "The body stares from across the room...";
+
+    else if (questStep == 4)
+    text = "Dismembered body parts roll at your feet";
+    
+    else if (questStep == 5)
+    text = "Blood leaks from the crate";
+    
+    else
+    text = "I figured you'd come for me";
+    return text;
     }
   
   private String setDogSpeech(){

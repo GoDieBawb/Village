@@ -10,7 +10,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResults;
-import com.jme3.scene.Geometry;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 /**
@@ -40,7 +40,9 @@ public class Player extends Node {
   public boolean     stealWarn;
   public boolean     hasMeat;
   public boolean     gaveMeat;
-  public boolean     isDone = true;
+  public boolean     isDone;
+  public int         level;
+  public String      questStep;
   
     
   public void swing(AppStateManager stateManager) {
@@ -66,9 +68,265 @@ public class Player extends Node {
     }
   }
   
-  private void getItem(CollisionResults results, AppStateManager stateManager){
+  private void getItem(CollisionResults results, AppStateManager stateManager) {
     
+    if (level == 2)
+    getLevelTwoItems(results, stateManager);
+    else
+    getLevelOneItems(results, stateManager);
+    }    
+  
+  private void getLevelTwoItems(CollisionResults results, AppStateManager stateManager){      
+    Node item = results.getCollision(0).getGeometry().getParent();  
+    GuiManager gui = stateManager.getState(GuiManager.class);   
+    
+    if (item.getName().equals("Shovel2")){
+        
+      if (questStep.equals("FindScythe")){
+        gui.showAlert(item.getName(), "This wouldn't do the job...");
+        }
+      
+      else if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "You have work to do");
+        }
+      
+      else if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "Best not to go outside to hide the body");
+        }
+
+      else if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "This won't help the body fit in the crate"); 
+        }
+
+      else if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "The body can't be hid here"); 
+        }
+
+      else if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "You should leave before someone shows up");  
+        }
+      
+      }
+    
+    if (item.getName().equals("Table2")){
+      
+      if (questStep.equals("FindScythe")){
+        gui.showAlert("Table", "This is no time to eat...");   
+        }
+      
+      else if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "This is no time to eat..."); 
+        }
+      
+      else if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "This is no time to eat..."); 
+        }
+
+      else if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "This is no time to eat..."); 
+        }
+
+      else if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "This is no time to eat..."); 
+        }
+
+      else if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "This is no time to eat..."); 
+        }
+        
+      }
+
+    if (item.getName().equals("SawTable")){
+       
+      if (questStep.equals("FindScythe")){
+        gui.showAlert(item.getName(), "A saw would be too messy...");   
+        }
+      
+      else if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "You have what you need..."); 
+        }
+      
+      else if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "This may be useful soon...");   
+        }
+
+      else if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "You take the saw...");
+        questStep = "HideBody";
+        item.getChild("Saw").removeFromParent();
+        }
+
+      else if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "The table is empty");  
+        }
+
+      else if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "The table is empty"); 
+        }
+        
+      }
+
+    if (item.getName().equals("Scythe")){
+      
+      if (questStep.equals("FindScythe")){
+        gui.showAlert(item.getName(), "This is perfect... What a fitting item to complete your task"); 
+        item.removeFromParent();
+        questStep = "Murder";
+        }
+      
+      else if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "Nothing here...");   
+        }
+      
+      else if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "Nothing here...");
+        }
+
+      else if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "Nothing here...");
+        }
+
+      else if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "Nothing here...");
+        }
+
+      else if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "Nothing here...");
+        }
+        
+      }
+    
+    if (item.getName().equals("FirePlace")){
+      gui.showAlert(item.getName(), "Probably too afraid to make a fire...");  
+      if (questStep.equals("FindScythe")){
+        }
+      
+      if (questStep.equals("Murder")){
+        }
+      
+      if (questStep.equals("FindCrate")){
+        }
+
+      if (questStep.equals("FindSaw")){
+        }
+
+      if (questStep.equals("HideBody")){
+        }
+
+      if (questStep.equals("LeaveHouse")){
+        }
+      
+      }
+
+    if (item.getName().equals("Door")){
+        
+      if (questStep.equals("FindScythe")){
+        gui.showAlert(item.getName(), "You still have work to do...");
+        }
+      
+      if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "You still have work to do...");
+        }
+      
+      if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "You must hide the body...");
+        }
+
+      if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "You must hide the body...");
+        }
+
+      if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "You must hide the body...");
+        }
+
+      if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "You leave the house...");
+        playerPhys.warp(new Vector3f(new Vector3f(-7, 1, -3)));
+        }
+      
+      }
+
+    if (item.getName().equals("Painting")){
+      gui.showAlert(item.getName(), "A quite interesting painting...");  
+      if (questStep.equals("FindScythe")){
+        }
+      
+      if (questStep.equals("Murder")){
+        }
+      
+      if (questStep.equals("FindCrate")){
+        }
+
+      if (questStep.equals("FindSaw")){
+        }
+
+      if (questStep.equals("HideBody")){
+        }
+
+      if (questStep.equals("LeaveHouse")){
+        }
+      
+      }
+
+    if (item.getName().equals("Crate")){
+        
+      if (questStep.equals("FindScythe")){
+        gui.showAlert(item.getName(), "Find something to finish the job...");
+        }
+      
+      else if (questStep.equals("Murder")){
+        gui.showAlert(item.getName(), "You have what you need...");
+        }
+      
+      else if (questStep.equals("FindCrate")){
+        gui.showAlert(item.getName(), "A large empty crate... But the body is just too big to fit.");
+        questStep = "FindSaw";
+        }
+
+      else if (questStep.equals("FindSaw")){
+        gui.showAlert(item.getName(), "Maybe something can help you fit the body here.");
+        }
+
+      else if (questStep.equals("HideBody")){
+        gui.showAlert(item.getName(), "You place the dismembered parts into the crate...");
+        questStep = "LeaveHouse";
+        }
+
+      else if (questStep.equals("LeaveHouse")){
+        gui.showAlert(item.getName(), "A crate full of dismembered body parts");
+        }
+        
+      }
+
+    if (item.getName().equals("Chair")){
+      gui.showAlert(item.getName(), "Now is no time to relax...");  
+      if (questStep.equals("FindScythe")){
+        }
+      
+      if (questStep.equals("Murder")){
+        }
+      
+      if (questStep.equals("FindCrate")){
+        }
+
+      if (questStep.equals("FindSaw")){
+        }
+
+      if (questStep.equals("HideBody")){
+        }
+
+      if (questStep.equals("LeaveHouse")){
+        }
+        
+      }
+      
+      }
+    
+  private void getLevelOneItems(CollisionResults results, AppStateManager stateManager){
+  
     Node item = results.getCollision(0).getGeometry().getParent().getParent();
+    
     GuiManager gui = stateManager.getState(GuiManager.class);
     
     if (item.getName().equalsIgnoreCase("Shovel")){
@@ -134,11 +392,9 @@ public class Player extends Node {
         bla.getChild(2).removeFromParent();
         } else {
         gui.showAlert("Interact", "This ham is raw...");
-        }  
-      
-      }
-    
+        }
     }
+  }  
   
   public void run(){
     if (!armChannel.getAnimationName().equals("ArmRun") && !hasSwung){
