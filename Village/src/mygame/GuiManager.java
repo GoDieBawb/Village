@@ -34,6 +34,11 @@ public class GuiManager extends AbstractAppState {
   private Joystick          stick;
   private Player            player;
   private ButtonAdapter     interactButton;
+  private String            delayedMessage;
+  private String            delayedTitle;
+  private int               alertDelay;
+  private long              delayStart;
+  private boolean           hasAlert;
   
   @Override
   public void initialize(AppStateManager stateManager, Application app){
@@ -49,7 +54,7 @@ public class GuiManager extends AbstractAppState {
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
     initAlertBox();
-    initJoyStick();
+    //initJoyStick();
     }
   
   private void initInteractButton(){
@@ -92,6 +97,14 @@ public class GuiManager extends AbstractAppState {
     alert.showWithEffect();
     alert.setWindowTitle(speaker);
     alert.setMsg(text);
+    }
+  
+  public void delayAlert(String speaker, String text, int delay){
+    hasAlert       = true;
+    delayStart     = System.currentTimeMillis() / 1000;
+    alertDelay     = delay;
+    delayedTitle   = speaker;
+    delayedMessage = text;
     }
 
   private void initJoyStick(){
@@ -143,5 +156,15 @@ public class GuiManager extends AbstractAppState {
       stick.addEffect(fxOut);
       stick.show();
       }
+  
+  @Override
+  public void update(float tpf){
+    
+    if (hasAlert)
+    if (System.currentTimeMillis()/1000 - delayStart > alertDelay){
+      showAlert(delayedTitle, delayedMessage);
+      hasAlert = false;
+      }
+    }
   
   }

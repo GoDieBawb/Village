@@ -13,10 +13,6 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-/**
- *
- * @author Bob
- */
 public class Player extends Node {
  
   public BetterCharacterControl playerPhys;
@@ -26,24 +22,9 @@ public class Player extends Node {
   public AnimChannel legChannel;
   public boolean     hasSwung;
   public long        lastSwing;
-  public float       speedMult;
-  
-  public boolean     hasShovel;
-  public boolean     hasShrooms;
-  public boolean     axePerm;
-  public boolean     hasAxe;
-  public boolean     hasWood;
-  public boolean     hamCooked;
-  public boolean     hasHam;
-  public boolean     hasDog;
-  public boolean     gaveDog;
-  public boolean     stealWarn;
-  public boolean     hasMeat;
-  public boolean     gaveMeat;
-  public boolean     isDone;
+  public float       speedMult; 
   public int         level;
   public String      questStep;
-  
     
   public void swing(AppStateManager stateManager) {
     
@@ -77,6 +58,7 @@ public class Player extends Node {
     }    
   
   private void getLevelTwoItems(CollisionResults results, AppStateManager stateManager){      
+    
     Node item = results.getCollision(0).getGeometry().getParent();  
     GuiManager gui = stateManager.getState(GuiManager.class);   
     
@@ -197,7 +179,9 @@ public class Player extends Node {
       }
     
     if (item.getName().equals("FirePlace")){
-      gui.showAlert(item.getName(), "Probably too afraid to make a fire...");  
+        
+      gui.showAlert(item.getName(), "You probably shouldn't make a fire...");  
+      
       if (questStep.equals("FindScythe")){
         }
       
@@ -330,16 +314,16 @@ public class Player extends Node {
     GuiManager gui = stateManager.getState(GuiManager.class);
     
     if (item.getName().equalsIgnoreCase("Shovel")){
-      hasShovel = true;
+      questStep = "hasShovel";
       item.removeFromParent();
       gui.showAlert("Interact", "You take the shovel");
       }
     
     if (item.getName().equalsIgnoreCase("Mushrooms")){
       
-      if (hasShovel){
+      if (questStep.equals("hasShovel")){
         gui.showAlert("Interact", "With some effort you dig up the mushrooms...");
-        hasShrooms = true;
+        questStep = "hasShrooms";
         item.removeFromParent();
         
         } else {
@@ -350,13 +334,13 @@ public class Player extends Node {
 
     if (item.getName().equalsIgnoreCase("Axe")) {
         
-        if (hasAxe){
+        if (questStep.equals("hasAxe")){
         gui.showAlert("Interact", "An empty chopping block..."); 
         }
         
-        else if (axePerm) {
+        else if (questStep.equals("axePerm")) {
         gui.showAlert("Interact", "You take the axe"); 
-        hasAxe = true;
+        questStep = "hasAxe";
         item.getChild(1).removeFromParent();
         
         } else {
@@ -367,9 +351,9 @@ public class Player extends Node {
     
     if (item.getName().equalsIgnoreCase("Tree")){
       
-      if (hasAxe){
+      if (questStep.equals("hasAxe")){
         gui.showAlert("Interact", "You cut down the tree and retrieve the wood");
-        hasWood = true;
+        questStep = "hasWood";
         item.removeFromParent();
         
         } else {
@@ -380,14 +364,13 @@ public class Player extends Node {
     
     if (item.getName().equalsIgnoreCase("Table")){
         
-        if (hasHam){
+        if (questStep.equals("hasHam")){
         gui.showAlert("Interact", "You've taken all the food"); 
         }
         
-        else if (hamCooked){
+        else if (questStep.equals("hamCooked")){
         gui.showAlert("Interact", "You take the ham... You did get the wood after all");
-        hasHam    = true;
-        hamCooked = false;
+        questStep = "hasHam";
         Node bla = (Node) item.getChild(0);
         bla.getChild(2).removeFromParent();
         } else {

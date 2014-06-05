@@ -7,6 +7,7 @@ package mygame;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.scene.Node;
@@ -51,41 +52,41 @@ public class Npc extends Node {
     
   }
   
-  public String speak(Player player){
+  public String speak(AppStateManager stateManager){
+    Player player = stateManager.getState(PlayerManager.class).player;
     lastSpoke = System.currentTimeMillis()/1000;
     hasSpoken = true;
     String text = new String();
     
     if (this.getName().equals("Blacksmith")){
-    blacksmithQuest(player);
+    blacksmithQuest(player, stateManager);
     text = setBlackSmithSpeech();
     }
     
     if (this.getName().equals("InnKeeper")){
-    innKeeperQuest(player);
+    innKeeperQuest(player, stateManager);
     text = setInnKeeperSpeech();
     }
     
     if (this.getName().equals("Priest")){
-    priestQuest(player);
+    priestQuest(player, stateManager);
     text = setPriestSpeech();
     }
     
     if (this.getName().equals("Dog")){
-    dogQuest(player);
+    dogQuest(player, stateManager);
     text = setDogSpeech();
     }
     
     if (this.getName().equals("Victim")){
-    victimQuest(player);
+    victimQuest(player, stateManager);
     text =  setVictimSpeech();
     }
     
     return text;
-    }
+    } 
   
-  
-  private void victimQuest(Player player){
+  private void victimQuest(Player player, AppStateManager stateManager){
     
     if (player.questStep.equals("Murder")) {
     questStep = 2;
@@ -105,72 +106,75 @@ public class Npc extends Node {
 
     }
   
-  private void blacksmithQuest(Player player){
+  private void blacksmithQuest(Player player, AppStateManager stateManager){
       
-    if (player.hasShrooms){
+    if (player.questStep.equals("Start")){
+      questStep = 2;
+      }
+      
+    else if (player.questStep.equals("hasShrooms")){
       questStep = 3;
-      player.axePerm = true;
+      player.questStep = "axePerm";
       }
     
-    if (player.isDone){
+    else if (player.questStep.equals("isDone")){
       questStep = 4;
       }
     
     }
   
-  private void priestQuest(Player player){
+  private void priestQuest(Player player, AppStateManager stateManager){
 
-    if (player.hasDog) {
+    if (player.questStep.equals("hasDog")) {
     questStep = 3;
-    player.gaveDog = true;
-    player.hasDog  = false;
+    player.questStep = "gaveDog";
     }
     
-    if (player.stealWarn) {
+    if (player.questStep.equals("stealWarn")) {
     questStep = 4;
-    player.stealWarn = false;
-    player.hasMeat = true;
+    stateManager.getState(GuiManager.class).delayAlert("Noise", "You hear a commotion at the inn...", 5);
+    player.questStep = "hasMeat";
     }
     
-    if (player.gaveMeat) {
+    if (player.questStep.equals("gaveMeat")) {
     AudioNode sound = (AudioNode) player.getParent().getChild("Laugh");
     questStep = 6;
-    player.isDone = true;
+    player.questStep = "isDone";
     sound.playInstance();
     }
      
     }
   
-  private void innKeeperQuest(Player player){
+  private void innKeeperQuest(Player player, AppStateManager stateManager){
       
-    if(player.hasWood){
+    if(player.questStep.equals("hasWood")){
     questStep = 3; 
-    player.hamCooked = true;
+    player.questStep = "hamCooked";
     }
     
-    if (player.gaveDog && !player.stealWarn){
+    if (player.questStep.equals("gaveDog")){
     questStep = 4;
-    player.stealWarn = true;
+    stateManager.getState(GuiManager.class).delayAlert("Noise", "The cry of a dog in the distance...", 5);
+    player.questStep = "stealWarn";
     }
     
-    if (player.stealWarn) {
+    if (player.questStep.equals("stealWarn")) {
     questStep = 4;
     }
     
-    if(player.hasMeat ^ player.gaveMeat) {
-    player.hasMeat = false;
-    player.gaveMeat = true;
+    if(player.questStep.equals("hasMeat")) {
+    player.questStep = "gaveMeat";
     questStep = 5;
     }
     
-    if(player.isDone)
+    if(player.questStep.equals("isDone"))
     questStep = 6;
         
     }
   
-  private void dogQuest(Player player){
-    if (player.hasHam && !player.gaveDog) {
-      player.hasDog = true;
+  private void dogQuest(Player player, AppStateManager stateManager){
+    if (player.questStep.equals("hasHam")) {
+      player.questStep = "hasDog";
       questStep = 2;      
       }
     }

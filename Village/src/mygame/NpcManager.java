@@ -189,14 +189,13 @@ public class NpcManager extends AbstractAppState {
     }
   
   public void dogChecker(){
-    if (npcNode.getChild("Dog") != null && player.stealWarn){
+    if (npcNode.getChild("Dog") != null && player.questStep.equals("stealWarn")){
     npcNode.getChild("Dog").removeFromParent();
     }
       
-    if (player.hasDog){
+    if (player.questStep.equals("hasDog")){
       Npc dog = (Npc) npcNode.getChild("Dog");
       float distance = dog.getWorldTranslation().distance(player.getWorldTranslation());
-      System.out.println(distance);
       
       if (distance > 10){
         dog.npcPhys.warp(player.getWorldTranslation().add(0, 3, 0));
@@ -231,7 +230,7 @@ public class NpcManager extends AbstractAppState {
         npc.npcPhys.setViewDirection(playerDir);
         
          if (!npc.hasSpoken){
-          stateManager.getState(GuiManager.class).showAlert(npc.getName(), npc.speak(player));
+          stateManager.getState(GuiManager.class).showAlert(npc.getName(), npc.speak(stateManager));
           }
 
         }

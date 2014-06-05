@@ -70,7 +70,8 @@ public class PlayerManager extends AbstractAppState {
     player.model.setMaterial(mat);
     player.attachChild(player.model);
     player.model.setLocalTranslation(0, -.1f, 0);
-        
+    
+    player.questStep = "Start";
     this.app.getRootNode().attachChild(player);
     }
   
@@ -108,12 +109,12 @@ public class PlayerManager extends AbstractAppState {
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
     player.hasSwung = false;
       
-    if (player.getLocalTranslation().y < -5 && !player.isDone){
+    if (player.getLocalTranslation().y < -5 && !player.questStep.equals("isDone")){
       
       player.playerPhys.warp(new Vector3f(45, 1, 38));
       stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
       
-      } else if (player.getLocalTranslation().y < -5 && player.isDone) {
+      } else if (player.getLocalTranslation().y < -5 && player.questStep.equals("isDone")) {
       initLevelTwo();
       }
     
