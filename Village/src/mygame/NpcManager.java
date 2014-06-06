@@ -188,7 +188,20 @@ public class NpcManager extends AbstractAppState {
     
     }
   
-  public void dogChecker(){
+  public void initHorse(){
+    Npc cartNode          = new Npc();
+    cartNode.model        = (Node) stateManager.getState(SceneManager.class).scene.getChild("Cart");
+    Node horse            = (Node) cartNode.model.getChild("Horse");
+    cartNode.animControl  = horse.getControl(AnimControl.class);
+    cartNode.armChannel   = cartNode.animControl.createChannel();
+    
+    cartNode.setName("Horse");
+    cartNode.armChannel.setAnim("EatLow");
+    cartNode.attachChild(cartNode.model);
+    npcNode.attachChild(cartNode);
+    }
+  
+  private void dogChecker(){
     if (npcNode.getChild("Dog") != null && player.questStep.equals("stealWarn")){
     npcNode.getChild("Dog").removeFromParent();
     }
@@ -216,18 +229,39 @@ public class NpcManager extends AbstractAppState {
       }
     }
   
+  private void horseChecker(float tpf){
+      
+    if (npcNode.getChild("Horse") != null){
+        
+      Npc horse = (Npc) npcNode.getChild("Horse"); 
+      
+      if (player.questStep.equals("LeftHouse")) {
+        Vector3f moveDir = new Vector3f(0, 0, 3);
+        horse.setLocalTranslation(horse.getLocalTranslation().addLocal(moveDir.mult(tpf)));
+        if (!horse.armChannel.getAnimationName().equals("Gallop"))
+        horse.armChannel.setAnim("Gallop");
+        }
+    
+      if (npcNode.getChild("Horse").getLocalTranslation().y < -5)
+      horse.removeFromParent();
+      
+      }
+    }
+  
   @Override
   public void update(float tpf){
     
     dogChecker();
-      
+    horseChecker(tpf);  
+    
     for (int i = 0; i < npcNode.getQuantity(); i++) {
       
       Npc npc = (Npc) npcNode.getChild(i);
       Vector3f playerDir = player.model.getWorldTranslation().subtract(npc.model.getWorldTranslation());
       
       if (player.model.getWorldTranslation().distance(npc.model.getWorldTranslation()) < 3) {
-        npc.npcPhys.setViewDirection(playerDir);
+         if (npc.npcPhys != null)
+         npc.npcPhys.setViewDirection(playerDir);
         
          if (!npc.hasSpoken){
           stateManager.getState(GuiManager.class).showAlert(npc.getName(), npc.speak(stateManager));

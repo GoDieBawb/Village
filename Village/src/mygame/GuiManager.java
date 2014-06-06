@@ -54,7 +54,7 @@ public class GuiManager extends AbstractAppState {
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
     initAlertBox();
-    //initJoyStick();
+    initJoyStick();
     }
   
   private void initInteractButton(){

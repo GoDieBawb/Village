@@ -145,7 +145,7 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             player.idle();
         }
         
-       player.playerPhys.setWalkDirection(walkDirection.mult(1));
+       player.playerPhys.setWalkDirection(walkDirection.mult(player.speedMult));
        player.playerPhys.setViewDirection(camDir);
 
     }

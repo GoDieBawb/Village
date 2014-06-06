@@ -84,9 +84,10 @@ public class PlayerManager extends AbstractAppState {
     stateManager.getState(SceneManager.class).initSceneTwo();
     app.getRootNode().attachChild(stateManager.getState(NpcManager.class).npcNode);
     stateManager.getState(NpcManager.class).initVictim();
+    stateManager.getState(NpcManager.class).initHorse();
     
     physics.getPhysicsSpace().add(player.playerPhys);
-    player.playerPhys.warp(new Vector3f(new Vector3f(-5, 1, -3)));
+    player.playerPhys.warp(new Vector3f(new Vector3f(-15, 1, -3)));
     player.model.setCullHint(Spatial.CullHint.Never);
     player.level = 2;
     
@@ -96,11 +97,9 @@ public class PlayerManager extends AbstractAppState {
     
     mat.setTexture("ColorMap", tex);
     player.model.setMaterial(mat);
-    player.questStep = "FindScythe";
+    player.questStep = "FindAxe";
     
     stateManager.getState(AudioManager.class).playSong(2);
-    stateManager.getState(GuiManager.class).showAlert("Reaper", "You close the door behind you...");
-    stateManager.getState(AudioManager.class).playSound("Door");
     }
   
   @Override

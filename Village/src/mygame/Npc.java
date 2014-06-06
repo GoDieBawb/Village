@@ -83,8 +83,25 @@ public class Npc extends Node {
     text =  setVictimSpeech();
     }
     
+    if (this.getName().equals("Horse")){
+    text = setHorseSpeech(player, stateManager);
+    }
+    
     return text;
     } 
+  
+  private String setHorseSpeech(Player player, AppStateManager stateManager){
+      
+    String text;
+    
+    if (player.questStep.equals("LeftHouse"))
+    text = "The horse is fleeing in terror"; 
+    
+    else
+    text = "This horse is extremely nervous...";   
+    
+    return text;
+    }
   
   private void victimQuest(Player player, AppStateManager stateManager){
     
@@ -127,12 +144,12 @@ public class Npc extends Node {
 
     if (player.questStep.equals("hasDog")) {
     questStep = 3;
+    stateManager.getState(GuiManager.class).delayAlert("Noise", "You hear a commotion at the inn...", 5);
     player.questStep = "gaveDog";
     }
     
     if (player.questStep.equals("stealWarn")) {
     questStep = 4;
-    stateManager.getState(GuiManager.class).delayAlert("Noise", "You hear a commotion at the inn...", 5);
     player.questStep = "hasMeat";
     }
     
@@ -167,8 +184,10 @@ public class Npc extends Node {
     questStep = 5;
     }
     
-    if(player.questStep.equals("isDone"))
+    if(player.questStep.equals("isDone")){
+    stateManager.getState(GuiManager.class).delayAlert("Guilt", "With the overwhelming guilt of the of act you just comitted... Suicide is the only answer...", 5);
     questStep = 6;
+    }
         
     }
   
