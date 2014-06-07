@@ -10,6 +10,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.Quaternion;
 import com.jme3.scene.Node;
 
 /**
@@ -106,6 +107,8 @@ public class Npc extends Node {
   private void victimQuest(Player player, AppStateManager stateManager){
     
     if (player.questStep.equals("Murder")) {
+    model.rotate(-89.5f, 0, 0);
+    animControl.setEnabled(false);
     questStep = 2;
     player.questStep = "FindCrate";
     }

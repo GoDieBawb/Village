@@ -133,7 +133,8 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             walkDirection.addLocal(camDir.negate());
             player.run();
         }
-        else if (left) {
+        
+        if (left) {
             walkDirection.addLocal(camLeft);
             player.run();
         }
@@ -141,11 +142,11 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             walkDirection.addLocal(camLeft.negate());
             player.run();
         
-        } else {
+        } else if (!up && !down) {
             player.idle();
         }
         
-       player.playerPhys.setWalkDirection(walkDirection.mult(player.speedMult));
+       player.playerPhys.setWalkDirection(walkDirection.mult(1));
        player.playerPhys.setViewDirection(camDir);
 
     }

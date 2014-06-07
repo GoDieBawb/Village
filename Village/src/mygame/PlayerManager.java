@@ -71,7 +71,7 @@ public class PlayerManager extends AbstractAppState {
     player.attachChild(player.model);
     player.model.setLocalTranslation(0, -.1f, 0);
     
-    player.questStep = "Start";
+    player.questStep = "isDone";
     this.app.getRootNode().attachChild(player);
     }
   

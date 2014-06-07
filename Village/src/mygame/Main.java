@@ -26,7 +26,6 @@ public class Main extends SimpleApplication {
     this.getStateManager().attach(new NpcManager());
     this.getStateManager().attach(new AudioManager());
     this.getStateManager().attach(new GuiManager());
-    this.getStateManager().attach(new ItemManager());
     }
 
     @Override
