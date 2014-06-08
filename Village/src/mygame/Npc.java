@@ -10,7 +10,6 @@ import com.jme3.animation.LoopMode;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.math.Quaternion;
 import com.jme3.scene.Node;
 
 /**
@@ -64,28 +63,36 @@ public class Npc extends Node {
     text = setBlackSmithSpeech();
     }
     
-    if (this.getName().equals("InnKeeper")){
+    else if (this.getName().equals("InnKeeper")){
     innKeeperQuest(player, stateManager);
     text = setInnKeeperSpeech();
     }
     
-    if (this.getName().equals("Priest")){
+    else if (this.getName().equals("Priest")){
     priestQuest(player, stateManager);
     text = setPriestSpeech();
     }
     
-    if (this.getName().equals("Dog")){
+    else if (this.getName().equals("Dog")){
     dogQuest(player, stateManager);
     text = setDogSpeech();
     }
     
-    if (this.getName().equals("Victim")){
+    else if (this.getName().equals("Victim")){
     victimQuest(player, stateManager);
     text =  setVictimSpeech();
     }
     
-    if (this.getName().equals("Horse")){
+    else if (this.getName().equals("Horse")){
     text = setHorseSpeech(player, stateManager);
+    }
+    
+    else if (this.getName().equals("Woodsman")){
+    text = woodsmanQuest(player, stateManager);
+    }
+    
+    else {
+    System.out.println(this.getName());
     }
     
     return text;
@@ -99,7 +106,7 @@ public class Npc extends Node {
     text = "The horse is fleeing in terror"; 
     
     else
-    text = "This horse is extremely nervous...";   
+    text = "This horse looks ready to go... Too bad he didn't leave in time.";   
     
     return text;
     }
@@ -199,6 +206,43 @@ public class Npc extends Node {
       player.questStep = "hasDog";
       questStep = 2;      
       }
+    }
+  
+  private String woodsmanQuest(Player player, AppStateManager stateManager){
+    
+    String text = new String();  
+    
+    if (player.questStep.equals("Start")){
+      text = "I found a horse in the woods... It's cargo must have dropped."; 
+      player.questStep = "findBottle";
+      
+      } else if (player.questStep.equals("findBottle")){
+      text =  "Go out in the woods... See if that horse dropped some liquor, I need a drink"; 
+      
+      } else if (player.questStep.equals("hasBottle")){
+      text =  "Aha! That's exactly what I needed..."; 
+      player.questStep = "findBook";
+      
+      } else if (player.questStep.equals("findBook")){
+      text =  "See if you can find some evidence of whose cart this was... I'm sure theres something the horse dropped"; 
+          
+      } else if (player.questStep.equals("hasBook")){
+      text =  "A priest... THAT PRIEST?! HE'S HERE? "; 
+      player.questStep = "findAxe";
+      
+      } else if (player.questStep.equals("findAxe")){
+      text =  "Go and find a weapon immediately... Bring it back";
+          
+      } else if (player.questStep.equals("hasAxe")){
+      text =  "Thanks... this would be perfect to kill you with...";
+      stateManager.getState(GuiManager.class).delayAlert("Death", "As the axe cuts through your flesh, you realize... your dead", 3);
+      stateManager.getState(GuiManager.class).delayAlert("Coming Soon!", "New levels coming soon as the game updates!", 6);
+      stateManager.getState(SceneManager.class).scene.removeFromParent();
+      this.removeFromParent();
+      }
+    
+    return text;
+    
     }
   
   private String setVictimSpeech(){

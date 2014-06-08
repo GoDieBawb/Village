@@ -5,8 +5,7 @@
 package mygame;
 
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
+
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -56,6 +55,18 @@ public class SceneManager extends AbstractAppState{
   public void initSceneTwo(){
     physics.getPhysicsSpace().removeAll(scene);
     scene               = (Node) assetManager.loadModel("Scenes/SceneTwo.j3o");
+    RigidBodyControl scenePhys = new RigidBodyControl(0f);
+    
+    scene.addControl(scenePhys);
+    physics.getPhysicsSpace().add(scenePhys);
+    
+    this.app.getRootNode().attachChild(scene);
+    makeUnshaded();
+    }
+  
+  public void initSceneThree(){
+    physics.getPhysicsSpace().removeAll(scene);
+    scene                      = (Node) assetManager.loadModel("Scenes/SceneThree.j3o");
     RigidBodyControl scenePhys = new RigidBodyControl(0f);
     
     scene.addControl(scenePhys);

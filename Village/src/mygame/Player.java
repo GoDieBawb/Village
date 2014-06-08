@@ -54,11 +54,103 @@ public class Player extends Node {
   
   private void getItem(CollisionResults results, AppStateManager stateManager) {
     
-    if (level == 2)
+    if (level == 3)
+    getLevelThreeItems(results, stateManager); 
+    else if (level == 2)
     getLevelTwoItems(results, stateManager);
     else
     getLevelOneItems(results, stateManager);
     }    
+  
+  private void getLevelThreeItems(CollisionResults results, AppStateManager stateManager){
+    Node item = results.getCollision(0).getGeometry().getParent();  
+    GuiManager gui = stateManager.getState(GuiManager.class);  
+    
+    if (item.getName().equals("Table")){
+      gui.showAlert(item.getName(), "An empty table...");
+      }
+    
+    if (item.getName().equals("Bottle")){
+      
+      if (questStep.equals("Start")){
+        gui.showAlert(item.getName(), "Looks like somebody dropped something...");
+        }
+      
+      else if (questStep.equals("findBottle")){
+        gui.showAlert(item.getName(), "You grab the bottle of vodka");
+        item.getChild("Bottle").removeFromParent();
+        questStep = "hasBottle";
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "The rest looks like junk...");
+        }
+      
+      }
+    
+    if (item.getName().equals("Axe")){
+        
+      if (questStep.equals("Start")){
+        gui.showAlert(item.getName(), "Looks like somebody dropped something...");
+        }
+      
+      else if (questStep.equals("findAxe")){
+        gui.showAlert(item.getName(), "This will make a good weapon");
+        item.getChild("Axe").removeFromParent();
+        TextureKey key     = new TextureKey("Models/Person/Priest.png", true);
+        Texture tex        = stateManager.getApplication().getAssetManager().loadTexture(key);
+        Material mat       = new Material(stateManager.getApplication().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    
+        mat.setTexture("ColorMap", tex);
+        Npc priest = (Npc) stateManager.getState(NpcManager.class).npcNode.getChild("Woodsman");
+        priest.model.setMaterial(mat);
+        questStep = "hasAxe";
+        }
+      
+      else if (questStep.equals("hasAxe")){
+        gui.showAlert(item.getName(), "Get back to the black smith");
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "This doesn't look interesting at the moment");
+        }
+        
+      }
+    
+    if (item.getName().equals("Book")){
+        
+      if (questStep.equals("Start")){
+        gui.showAlert(item.getName(), "Looks like somebody dropped something...");
+        }
+      
+      else if (questStep.equals("findBook")){
+        gui.showAlert(item.getName(), "The priest... He's coming...");
+        questStep = "hasBook";
+        }
+
+      else if (questStep.equals("hasBook")){
+        gui.showAlert(item.getName(), "Maybe you should tell the Woodsman about this priest...");
+        }
+
+      else {
+        gui.showAlert(item.getName(), "This doesn't look interesting at the moment");
+        }
+        
+      }
+    
+    if (item.getName().equals("Pen")){
+      gui.showAlert(item.getName(), "That horse looks pretty panicked...");
+      }
+    
+    if (item.getName().equals("Cart")){
+      gui.showAlert(item.getName(), "This cart looks like it's seen better days...");
+      }
+    
+    if (item.getName().equals("Tree")){
+      gui.showAlert(item.getName(), "Looks like a tree");
+      }
+  
+    }
   
   private void getLevelTwoItems(CollisionResults results, AppStateManager stateManager){      
     
@@ -187,11 +279,14 @@ public class Player extends Node {
       
       }
     
-    if (item.getName().equals("Axe")){
+    if (item.getName().equals("Axe")) {
+        
       if (item.getChild("Axe") != null) {
+          
         gui.showAlert(item.getName(), "You take the axe..."); 
         item.getChild("Axe").removeFromParent();
         questStep = "ChopDoor";
+        
         } else {
         gui.showAlert(item.getName(), "An empty chopping block..."); 
         }

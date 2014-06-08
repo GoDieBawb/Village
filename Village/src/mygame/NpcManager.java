@@ -76,7 +76,7 @@ public class NpcManager extends AbstractAppState {
     npcNode.attachChild(priest);
     }
   
-  private void initBlacksmith(){
+  public void initBlacksmith(){
     Npc blackSmith         = new Npc();
     blackSmith.model       = (Node) assetManager.loadModel("Models/Person/Person.j3o");
     TextureKey key         = new TextureKey("Models/Person/BlackSmith.png", true);

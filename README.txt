@@ -2,11 +2,15 @@ Controls
 
 WASD and hold E to show cursor to exit alerts
 
+Also Press SpaceBar for easy interactions
+
 Sources
 
-Player Character from willymax.0 at http://www.blendswap.com/blends/view/70419
-Character's Axed from OOLE at http://www.blendswap.com/blends/view/53587
-Pinetree from Rohweder at http://www.blendswap.com/blends/view/72691
+Player Character from willymax.0 at blendswap
+Character's Axed from OOLE at at blendswap
+Pinetree from Rohweder at at blendswap
+Song "Tumbling Leaves" by Black Coyote
+Items Plants and Buildings from WorldForge
 
 Sources Gained from WorldForge assetpack
 

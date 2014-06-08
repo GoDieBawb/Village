@@ -71,7 +71,8 @@ public class PlayerManager extends AbstractAppState {
     player.attachChild(player.model);
     player.model.setLocalTranslation(0, -.1f, 0);
     
-    player.questStep = "isDone";
+    player.level = 1;
+    player.questStep = "Start";
     this.app.getRootNode().attachChild(player);
     }
   
@@ -97,7 +98,39 @@ public class PlayerManager extends AbstractAppState {
     
     mat.setTexture("ColorMap", tex);
     player.model.setMaterial(mat);
-    player.questStep = "FindAxe";
+    player.questStep = "Start";
+    
+    stateManager.getState(AudioManager.class).playSong(2);
+    }
+  
+  private void initLevelThree(){
+    app.getRootNode().detachAllChildren();
+    app.getRootNode().attachChild(player);
+    
+    NpcManager npcManager = stateManager.getState(NpcManager.class);
+    npcManager.npcNode.detachAllChildren();
+    stateManager.getState(SceneManager.class).initSceneThree();
+    app.getRootNode().attachChild(npcManager.npcNode);
+
+    npcManager.initBlacksmith();
+    
+    Npc woodsMan = (Npc) npcManager.npcNode.getChild("Blacksmith");
+    woodsMan.setName("Woodsman");
+    woodsMan.npcPhys.warp(new Vector3f(25, 1.2f, 3f));
+    
+    physics.getPhysicsSpace().add(player.playerPhys);
+    player.playerPhys.warp(new Vector3f(-15, 1, -3));
+    player.model.setCullHint(Spatial.CullHint.Never);
+    player.level = 3;
+    
+    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    Texture tex        = assetManager.loadTexture(key);
+    Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    
+    mat.setTexture("ColorMap", tex);
+    player.model.setMaterial(mat);
+    
+    player.questStep = "Start";
     
     stateManager.getState(AudioManager.class).playSong(2);
     }
@@ -105,16 +138,26 @@ public class PlayerManager extends AbstractAppState {
   @Override
   public void update(float tpf){
     
+    //Swing Check
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
     player.hasSwung = false;
-      
-    if (player.getLocalTranslation().y < -5 && !player.questStep.equals("isDone")){
-      
+    
+    //Check for the player jumping off the edge. A series of checks for level and step
+    
+    if (player.getLocalTranslation().y < -5 && !player.questStep.equals("isDone") && player.level == 1){
       player.playerPhys.warp(new Vector3f(45, 1, 38));
       stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
       
-      } else if (player.getLocalTranslation().y < -5 && player.questStep.equals("isDone")) {
+      } else if (player.getLocalTranslation().y < -5 && player.questStep.equals("isDone") && player.level == 1) {
       initLevelTwo();
+      
+      } else if (player.getLocalTranslation().y < -5 && !player.questStep.equals("LeftHouse") && player.level == 2) {
+      stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+      player.playerPhys.warp(new Vector3f(new Vector3f(-15, 1, -3)));      
+      
+      } else if (player.getLocalTranslation().y < -5 && player.questStep.equals("LeftHouse") && player.level == 2) {
+      initLevelThree();
+      
       }
     
     }
