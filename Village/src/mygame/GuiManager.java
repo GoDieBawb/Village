@@ -31,7 +31,7 @@ public class GuiManager extends AbstractAppState {
   private AssetManager      assetManager;
   private AlertBox          alert;
   private Screen            screen;
-  private Joystick          stick;
+  private MyJoystick        stick;
   private Player            player;
   private ButtonAdapter     interactButton;
   private String            delayedMessage;
@@ -54,7 +54,7 @@ public class GuiManager extends AbstractAppState {
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
     initAlertBox();
-    //initJoyStick();
+    initJoyStick();
     }
   
   private void initInteractButton(){
@@ -108,7 +108,8 @@ public class GuiManager extends AbstractAppState {
     }
 
   private void initJoyStick(){
-    stick = new Joystick(screen, Vector2f.ZERO, (int)(screen.getWidth()/6)) {
+    stick = new MyJoystick(screen, Vector2f.ZERO, (int)(screen.getWidth()/6)) {
+    
     @Override
     public void onUpdate(float tpf, float deltaX, float deltaY) {
         float dzVal = .2f; // Dead zone threshold

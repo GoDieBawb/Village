@@ -53,6 +53,7 @@ public class Npc extends Node {
   }
   
   public String speak(AppStateManager stateManager){
+    
     Player player = stateManager.getState(PlayerManager.class).player;
     lastSpoke = System.currentTimeMillis()/1000;
     hasSpoken = true;
@@ -89,6 +90,18 @@ public class Npc extends Node {
     
     else if (this.getName().equals("Woodsman")){
     text = woodsmanQuest(player, stateManager);
+    }
+    
+    else if (this.getName().equals("Billy")){
+    text = billyQuest(player, stateManager);
+    }
+
+    else if (this.getName().equals("Chemist")){
+    text = chemistQuest(player, stateManager);
+    }
+
+    else if (this.getName().equals("Spider")){
+    text = spiderQuest(player, stateManager);
     }
     
     else {
@@ -235,14 +248,105 @@ public class Npc extends Node {
           
       } else if (player.questStep.equals("hasAxe")){
       text =  "Thanks... this would be perfect to kill you with...";
-      stateManager.getState(GuiManager.class).delayAlert("Death", "As the axe cuts through your flesh, you realize... your dead", 3);
-      stateManager.getState(GuiManager.class).delayAlert("Coming Soon!", "New levels coming soon as the game updates!", 6);
-      stateManager.getState(SceneManager.class).scene.removeFromParent();
-      this.removeFromParent();
+      stateManager.getState(PlayerManager.class).initLevelThree();
       }
     
     return text;
     
+    }
+  
+  private String billyQuest(Player player, AppStateManager stateManager){
+    String text = new String();
+    
+    if (player.questStep.equals("Start")){
+      player.questStep = "getPoison";
+      text = "There's a huge spider upstairs! Go get some poison from the chemist to kill it!";
+      }
+    
+    else if (player.questStep.equals("getPoison")){
+      text = "Go get some poison from the chemist";    
+      }
+
+    else {
+      text = "I don't care what ingredients he needs just go get them!";      
+      }
+    
+    return text;
+    }
+  
+  private String spiderQuest(Player player, AppStateManager stateManager){
+    String text = new String();
+    
+    if (player.questStep.equals("isDone")){
+      text = "The End?";
+      player.getParent().detachAllChildren();
+      }
+    
+    else {
+      text = "The spider eats your stupid face off... Why would you do that?";
+      stateManager.getState(PlayerManager.class).initLevelFour();
+      }
+    
+    return text;
+    }
+  
+  private String chemistQuest(Player player, AppStateManager stateManager) {
+    String text = new String();
+    
+    if (player.questStep.equals("Start")){
+      text = "Go see what's going on over at Billy's house... He's been screaming all morning";
+      }
+    
+    else if (player.questStep.equals("getPoison")){
+      text = "A spider eh? Well I need some ingredients... First I'll need some acorns";
+      player.questStep = "getAcorns";
+      }
+    
+    else if (player.questStep.equals("getAcorns")){
+      text = "Well those acorns aren't going to get themselves... Hurry up!";
+      }
+    
+    else if (player.questStep.equals("hasAcorns")){
+      player.questStep = "getShovel";
+      text = "Those acorns are exactly what I needed! I'll need some red mushrooms next.";
+      }
+    
+    else if (player.questStep.equals("getShovel")){
+      text = "Go dig me up some red mushrooms! Hurry up.";
+      }
+ 
+    else if (player.questStep.equals("getMushrooms")){
+      text = "Well you have the shovel... Where's the mushrooms?";  
+      }
+
+    else if (player.questStep.equals("hasMushrooms")){
+      player.questStep = "getSilkfoot";
+      text = "Those are the red mushrooms I needed, next I'll need some large brown mushrooms.";
+      }
+
+    else if (player.questStep.equals("getSilkfoot")){
+      text = "I need large brown mushrooms... You'll find them somewhere around here.";
+      }
+
+    else if (player.questStep.equals("hasSilkfoot")){
+      player.questStep = "getCone";
+      text = "Ah... Those are some good looking mushrooms! The final ingredient is some cone top mushrooms...";
+      }
+
+    else if (player.questStep.equals("getCone")){
+       text = "Conetop mushrooms are hard to find... I'm sure you'll come through";
+      }
+    
+    else if (player.questStep.equals("hasCone")){
+      player.questStep = "hasPoison";
+      text = "There's the poison... That's enough to kill that spider and everyone in this village";
+      }
+
+    else if (player.questStep.equals("hasPoison")){
+      text = "That's enough poison to kill that spider 10 times over...";
+      }
+    
+    return text;
     }
   
   private String setVictimSpeech(){
@@ -262,7 +366,9 @@ public class Npc extends Node {
     
     else
     text = "I figured you'd come for me";
+    
     return text;
+    
     }
   
   private String setDogSpeech(){

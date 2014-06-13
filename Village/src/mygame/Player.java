@@ -53,14 +53,112 @@ public class Player extends Node {
   }
   
   private void getItem(CollisionResults results, AppStateManager stateManager) {
-    
-    if (level == 3)
+    if (level == 4)
+    getLevelFourItems(results, stateManager);    
+    else if (level == 3)
     getLevelThreeItems(results, stateManager); 
     else if (level == 2)
     getLevelTwoItems(results, stateManager);
     else
     getLevelOneItems(results, stateManager);
-    }    
+    }  
+  
+  private void getLevelFourItems(CollisionResults results, AppStateManager stateManager){
+    Node item = results.getCollision(0).getGeometry().getParent();  
+    GuiManager gui = stateManager.getState(GuiManager.class);
+    
+    if (item.getName().equals("Acorns")){
+      
+      if (questStep.equals("getAcorns")){
+        gui.showAlert(item.getName(), "You pick up the acorns.");
+        questStep = "hasAcorns";
+        item.removeFromParent();
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "Looks like some acorns... You don't need these.");
+        }
+      
+      }
+    
+    else if (item.getName().equals("Shovel")) {
+        
+      if (questStep.equals("getShovel")){
+        gui.showAlert(item.getName(), "You pick up the shovel.");
+        questStep = "getMushrooms";
+        item.removeFromParent();
+        }
+
+      else {
+        gui.showAlert(item.getName(), "I don't think you need this...");  
+        }  
+        
+      }
+    
+    else if (item.getName().equals("Mushrooms")) {
+      
+      if (questStep.equals("getMushrooms")){
+        gui.showAlert(item.getName(), "You pick up the Mushrooms.");
+        questStep = "hasMushrooms";
+        item.removeFromParent();
+        }
+      
+      else if (questStep.equals("getShovel")){
+        gui.showAlert(item.getName(), "These look like the correct mushrooms... If you only had a shovel!");  
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "Looks like some mushrooms... You don't need these.");
+        }
+        
+      }
+    
+    else if (item.getName().equals("Silkfoot")) {
+      
+      if (questStep.equals("getSilkfoot")){
+        gui.showAlert(item.getName(), "You pick up the large mushrooms.");
+        questStep = "hasSilkfoot";
+        item.removeFromParent();
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "Looks like some large mushrooms... You don't need these.");
+        }
+        
+      }
+    
+    else if (item.getName().equals("Cone")) {
+        
+       if (questStep.equals("getCone")){
+        gui.showAlert(item.getName(), "You pick up the cone mushrooms.");
+        questStep = "hasCone";
+        item.removeFromParent();
+        }
+      
+      else {
+        gui.showAlert("Cone Mushrooms", "Looks like some cone mushrooms... You don't need these.");
+        }       
+        
+      }
+
+    else if (item.getName().equals("Well")) {
+      
+      if (questStep.equals("hasPoison")){
+        gui.showAlert(item.getName(), "You dump the poison into the well ensuring the death of anyone who drinks here...");
+        questStep = "isDone";
+        }
+      
+      else {
+        gui.showAlert(item.getName(), "Looks like the whole town drinks from this well...");
+        }        
+        
+      }
+
+    else if (item.getName().equals("Tree")) {
+      gui.showAlert("Tree", "Yup thats a tree");  
+      }
+    
+    }
   
   private void getLevelThreeItems(CollisionResults results, AppStateManager stateManager){
     Node item = results.getCollision(0).getGeometry().getParent();  
@@ -126,6 +224,7 @@ public class Player extends Node {
       else if (questStep.equals("findBook")){
         gui.showAlert(item.getName(), "The priest... He's coming...");
         questStep = "hasBook";
+        stateManager.getState(AudioManager.class).playSong(2);
         }
 
       else if (questStep.equals("hasBook")){
@@ -139,7 +238,14 @@ public class Player extends Node {
       }
     
     if (item.getName().equals("Pen")){
-      gui.showAlert(item.getName(), "That horse looks pretty panicked...");
+      
+      if (questStep.equals("hasAxe")) {
+        gui.showAlert(item.getName(), "You chop your way through the gate jump on the horse and ride away... That woodsman was doomed anyway...");
+        stateManager.getState(PlayerManager.class).initLevelFour();
+        } 
+      
+      else    
+      gui.showAlert(item.getName(), "That horse looks pretty panicked... But the gate seems locked up tight.");
       }
     
     if (item.getName().equals("Cart")){

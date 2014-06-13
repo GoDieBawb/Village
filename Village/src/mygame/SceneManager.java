@@ -76,12 +76,23 @@ public class SceneManager extends AbstractAppState{
     makeUnshaded();
     }
   
+  public void initSceneFour(){
+    physics.getPhysicsSpace().removeAll(scene);
+    scene                      = (Node) assetManager.loadModel("Scenes/SceneFour.j3o");
+    RigidBodyControl scenePhys = new RigidBodyControl(0f);
+    
+    scene.addControl(scenePhys);
+    physics.getPhysicsSpace().add(scenePhys);
+    
+    this.app.getRootNode().attachChild(scene);
+    makeUnshaded();
+    }
+  
   private void makeUnshaded(){
       
     SceneGraphVisitor sgv = new SceneGraphVisitor() {
  
     public void visit(Spatial spatial) {
-      System.out.println(spatial);
  
       if (spatial instanceof Geometry) {
         

@@ -65,6 +65,7 @@ public class AudioManager extends AbstractAppState {
   public void playSong(int song){
       
     if (song == 1){
+    music2.stop();
     music1.play();
     } else {
     music1.stop();

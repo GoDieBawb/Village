@@ -201,6 +201,74 @@ public class NpcManager extends AbstractAppState {
     npcNode.attachChild(cartNode);
     }
   
+  public void initChemist(){
+    Npc chemist      = new Npc();
+    chemist.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
+    TextureKey key   = new TextureKey("Models/Person/Person.png", true);
+    Texture tex      = assetManager.loadTexture(key);
+    Material mat     = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    mat.setTexture("ColorMap", tex);
+
+    chemist.npcPhys     = new BetterCharacterControl(.5f, 1.5f, 100f);
+    chemist.animControl = chemist.model.getChild("Person").getControl(AnimControl.class);
+    chemist.armChannel  = chemist.animControl.createChannel();
+    chemist.legChannel  = chemist.animControl.createChannel();
+      
+    chemist.addControl(chemist.npcPhys);
+    chemist.model.setMaterial(mat);
+      
+    chemist.armChannel.setAnim("ArmIdle");
+    chemist.legChannel.setAnim("LegsIdle");
+    
+    chemist.attachChild(chemist.model);
+    chemist.scale(.3f, .35f, .3f);
+    chemist.setName("Chemist");
+    
+    physics.getPhysicsSpace().add(chemist.npcPhys);
+    chemist.npcPhys.warp(new Vector3f(-12, 1, -12));
+    npcNode.attachChild(chemist);
+    }
+  
+  public void initSpider(){
+    Npc spider         = new Npc();
+    spider.model       = (Node) stateManager.getState(SceneManager.class).scene.getChild("Spider");
+    spider.animControl = spider.model.getControl(AnimControl.class);
+    spider.armChannel  = spider.animControl.createChannel();
+    spider.armChannel.setAnim("Strike");
+    spider.setName("Spider");
+    spider.attachChild(spider.model);
+    npcNode.attachChild(spider);
+    
+    }
+  
+  public void initBilly(){
+    Npc billy      = new Npc();
+    billy.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
+    TextureKey key = new TextureKey("Models/Person/Person.png", true);
+    Texture tex    = assetManager.loadTexture(key);
+    Material mat   = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    mat.setTexture("ColorMap", tex);
+
+    billy.npcPhys     = new BetterCharacterControl(.5f, 1.5f, 100f);
+    billy.animControl = billy.model.getChild("Person").getControl(AnimControl.class);
+    billy.armChannel  = billy.animControl.createChannel();
+    billy.legChannel  = billy.animControl.createChannel();
+      
+    billy.addControl(billy.npcPhys);
+    billy.model.setMaterial(mat);
+      
+    billy.armChannel.setAnim("ArmIdle");
+    billy.legChannel.setAnim("LegsIdle");
+    
+    billy.attachChild(billy.model);
+    billy.scale(.3f, .35f, .3f);
+    billy.setName("Billy");
+    
+    physics.getPhysicsSpace().add(billy.npcPhys);
+    billy.npcPhys.warp(new Vector3f(7, 1, 13));
+    npcNode.attachChild(billy);
+    }
+  
   private void dogChecker(){
     if (npcNode.getChild("Dog") != null && player.questStep.equals("stealWarn")){
     npcNode.getChild("Dog").removeFromParent();
