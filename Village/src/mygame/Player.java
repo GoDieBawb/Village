@@ -12,6 +12,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
@@ -596,6 +597,27 @@ public class Player extends Node {
       legChannel.setAnim("LegsIdle");
       }
     
+    }
+  
+public boolean isInside(AppStateManager stateManager) {
+    boolean isInside         = false;
+    CollisionResults results = new CollisionResults();
+    Ray ray                  = new Ray(getLocalTranslation(), new Vector3f(0,1,0));
+    Node roofNode            = (Node) stateManager.getState(SceneManager.class).roofNode;
+    
+    roofNode.collideWith(ray, results);
+    
+    if (results.size() > 0){
+             
+      for (int i = 0; i < results.size(); i++) {
+          isInside = true;
+        
+        }
+        
+      }
+    
+    return isInside;
+      
     }
   
 }

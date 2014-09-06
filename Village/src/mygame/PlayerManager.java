@@ -30,6 +30,8 @@ public class PlayerManager extends AbstractAppState {
   private AssetManager      assetManager;
   private BulletAppState    physics;
   public  Player            player;
+  private Node              roofNode;
+  private boolean           roofsAttached;
   
   @Override
   public void initialize(AppStateManager stateManager, Application app){
@@ -38,6 +40,7 @@ public class PlayerManager extends AbstractAppState {
     this.stateManager = this.app.getStateManager();
     this.assetManager = this.app.getAssetManager();
     this.physics      = this.stateManager.getState(SceneManager.class).physics;
+    this.roofNode     = this.stateManager.getState(SceneManager.class).roofNode;
     initPlayer();
     }
   
@@ -201,10 +204,33 @@ public class PlayerManager extends AbstractAppState {
       
     }
   
+  private void roofChecker() {
+      
+    if (player.isInside(stateManager)) {
+      if (roofsAttached)
+      roofNode.removeFromParent();
+      roofsAttached = false;  
+      }
+    
+    else {
+        if (!roofsAttached)
+        app.getRootNode().attachChild(roofNode);
+        roofsAttached = true;
+        }
+    
+    }
+  
   @Override
   public void update(float tpf){
-     
-    System.out.println(player.getLocalTranslation());
+    
+    //Checks if the player is inside if so remove the roof  
+    if (stateManager.getState(InteractionManager.class).topDown)  
+    roofChecker();
+    else if (!roofsAttached) {
+      app.getRootNode().attachChild(roofNode);
+      roofsAttached = true;  
+      }
+        
       
     //Swing Check
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
@@ -213,6 +239,7 @@ public class PlayerManager extends AbstractAppState {
     //Check for the player jumping off the edge. A series of checks for level and step
     if (player.getWorldTranslation().y < -5)
     playerFallCheck();
+    
     }
   
   }

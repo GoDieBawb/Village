@@ -34,6 +34,7 @@ public class GuiManager extends AbstractAppState {
   private MyJoystick        stick;
   private Player            player;
   private ButtonAdapter     interactButton;
+  private ButtonAdapter     eyeButton;
   private String            delayedMessage;
   private String            delayedTitle;
   private int               alertDelay;
@@ -54,7 +55,9 @@ public class GuiManager extends AbstractAppState {
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
     initAlertBox();
+    
     initJoyStick();
+    initEyeButton();
     }
   
   private void initInteractButton(){
@@ -66,9 +69,10 @@ public class GuiManager extends AbstractAppState {
         }
       };
     
+    interactButton.setMaterial(assetManager.loadMaterial("Materials/Paper.j3m"));
     interactButton.setDimensions(screen.getWidth()/8, screen.getHeight()/10);
     interactButton.setPosition(screen.getWidth() / 1.1f - interactButton.getHeight(), screen.getHeight() / 1.1f - interactButton.getHeight());
-    //interactButton.setFont("Interface/Fonts/Impact.fnt");
+    interactButton.setFont("Interface/Fonts/UnrealTournament.fnt");
     interactButton.setText("Check");
     screen.addElement(interactButton);
     
@@ -82,6 +86,7 @@ public class GuiManager extends AbstractAppState {
       }
     };
     
+    alert.setMaterial(assetManager.loadMaterial("Materials/Paper.j3m"));
     alert.setWindowTitle("Welcome");
     alert.setMsg("Welcome to Townyville.");
     alert.setButtonOkText("Ok");
@@ -93,7 +98,7 @@ public class GuiManager extends AbstractAppState {
     screen.addElement(alert);
     }
   
-  public void showAlert(String speaker, String text){
+  public void showAlert(String speaker, String text) {
     alert.showWithEffect();
     alert.setWindowTitle(speaker);
     alert.setMsg(text);
@@ -112,33 +117,39 @@ public class GuiManager extends AbstractAppState {
     
     @Override
     public void onUpdate(float tpf, float deltaX, float deltaY) {
+        
         float dzVal = .2f; // Dead zone threshold
+        
             if (deltaX < -dzVal) {
-                stateManager.getState(InteractionManager.class).up = false;
-                stateManager.getState(InteractionManager.class).down = false;
-                stateManager.getState(InteractionManager.class).left = true;
-                stateManager.getState(InteractionManager.class).right = false;
-            } else if (deltaX > dzVal) {
-                stateManager.getState(InteractionManager.class).up = false;
-                stateManager.getState(InteractionManager.class).down = false;
-                stateManager.getState(InteractionManager.class).left = false;
-                stateManager.getState(InteractionManager.class).right = true;
-            } else if (deltaY < -dzVal) {
-                stateManager.getState(InteractionManager.class).left = false;
-                stateManager.getState(InteractionManager.class).right = false;
-                stateManager.getState(InteractionManager.class).down = true;
-                stateManager.getState(InteractionManager.class).up = false;
-            } else if (deltaY > dzVal) {
-                stateManager.getState(InteractionManager.class).left = false;
-                stateManager.getState(InteractionManager.class).right = false;
-                stateManager.getState(InteractionManager.class).down = false;
-                stateManager.getState(InteractionManager.class).up = true;
-            } else {
-                stateManager.getState(InteractionManager.class).left = false;
-                stateManager.getState(InteractionManager.class).right = false;
-                stateManager.getState(InteractionManager.class).up = false;
-                stateManager.getState(InteractionManager.class).down = false;
-            }
+              stateManager.getState(InteractionManager.class).left  = true;
+              stateManager.getState(InteractionManager.class).right = false;
+              } 
+            
+            else if (deltaX > dzVal) {
+              stateManager.getState(InteractionManager.class).right = true;
+              stateManager.getState(InteractionManager.class).left  = false;
+              }
+            
+            else {
+              stateManager.getState(InteractionManager.class).right = false;
+              stateManager.getState(InteractionManager.class).left  = false; 
+              }
+            
+        
+            if (deltaY < -dzVal) {
+              stateManager.getState(InteractionManager.class).down = true;
+              stateManager.getState(InteractionManager.class).up   = false;
+              } 
+            
+            else if (deltaY > dzVal) {
+              stateManager.getState(InteractionManager.class).down = false;
+              stateManager.getState(InteractionManager.class).up   = true;
+              }
+            
+            else {
+              stateManager.getState(InteractionManager.class).up   = false;
+              stateManager.getState(InteractionManager.class).down = false;    
+              }
             
           player.speedMult = FastMath.abs(deltaY);
           }
@@ -157,6 +168,30 @@ public class GuiManager extends AbstractAppState {
       stick.addEffect(fxOut);
       stick.show();
       }
+  
+  private void initEyeButton(){
+
+    eyeButton = new ButtonAdapter( screen, "EyeButton", new Vector2f(15, 15) ) {
+    
+    @Override
+      public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
+        
+        if (stateManager.getState(InteractionManager.class).topDown)
+        stateManager.getState(InteractionManager.class).topDown = false;
+        else
+        stateManager.getState(InteractionManager.class).topDown = true;
+        
+        }
+      };
+    
+    eyeButton.setMaterial(assetManager.loadMaterial("Materials/Paper.j3m"));
+    eyeButton.setDimensions(screen.getWidth()/8, screen.getHeight()/10);
+    eyeButton.setPosition(screen.getWidth() - eyeButton.getWidth()*1.5f, 0 + eyeButton.getHeight()/2);
+    eyeButton.setFont("Interface/Fonts/SwishButtons.fnt");
+    eyeButton.setText("w");
+    screen.addElement(eyeButton);      
+      
+    }
   
   @Override
   public void update(float tpf){

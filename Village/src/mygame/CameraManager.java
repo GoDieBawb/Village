@@ -9,6 +9,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.ChaseCamera;
+import com.jme3.math.Vector3f;
 
 /**
 *
@@ -24,9 +25,9 @@ public class CameraManager extends AbstractAppState {
   @Override
   public void initialize(AppStateManager stateManager, Application app){
     super.initialize(stateManager, app);
-    this.app = (SimpleApplication) app;
-    this.stateManager = this.app.getStateManager();
-    this.player = this.stateManager.getState(PlayerManager.class).player;
+    this.app           = (SimpleApplication) app;
+    this.stateManager  = this.app.getStateManager();
+    this.player        = this.stateManager.getState(PlayerManager.class).player;
     initCamera();
     }
   
@@ -45,8 +46,7 @@ public class CameraManager extends AbstractAppState {
     cam.setMinVerticalRotation(.145f);
     }
   
-  @Override 
-  public void update(float tpf) {
+  private void chaseCamMove() {
     if (cam.getDistanceToTarget() < 1){
     cam.setMinVerticalRotation(0f);
     cam.setMaxVerticalRotation(5f);
@@ -55,7 +55,29 @@ public class CameraManager extends AbstractAppState {
     cam.setMaxVerticalRotation(.145f);
     cam.setMinVerticalRotation(.145f); 
     }
-    
     }
   
+  private void topDownCamMove(){
+    app.getCamera().setLocation(player.getLocalTranslation().addLocal(0,30,0));
+    app.getCamera().lookAt(player.getLocalTranslation().multLocal(1,0,1), new Vector3f(0,1,0));
+    }
+  
+  @Override 
+  public void update(float tpf) {
+      
+    boolean topDown = stateManager.getState(InteractionManager.class).topDown;
+    
+    if (topDown) {
+    topDownCamMove();
+    cam.setEnabled(false);
+    }
+    
+    else {   
+    chaseCamMove();
+    if (!cam.isEnabled())
+    cam.setDragToRotate(false);    
+    cam.setEnabled(true);
+    }
+    
+    }
   }

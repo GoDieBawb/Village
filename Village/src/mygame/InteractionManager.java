@@ -32,15 +32,17 @@ public class InteractionManager extends AbstractAppState implements ActionListen
   private Vector3f camDir = new Vector3f();
   private Vector3f camLeft = new Vector3f();
   public boolean inv = false, left = false, right = false, up = false, down = false, click = false;
+  public boolean topDown;
   
   @Override
   public void initialize(AppStateManager stateManager, Application app){
     super.initialize(stateManager, app);
-    this.app = (SimpleApplication) app;
+    this.app          = (SimpleApplication) app;
     this.stateManager = this.app.getStateManager();
     this.assetManager = this.app.getAssetManager();
     this.inputManager = this.app.getInputManager();
-    this.player = this.stateManager.getState(PlayerManager.class).player;
+    this.player       = this.stateManager.getState(PlayerManager.class).player;
+    topDown           = false;
     setUpKeys();
     }
   
@@ -85,41 +87,25 @@ public class InteractionManager extends AbstractAppState implements ActionListen
     if (binding.equals("Left")) {
         
       left = isPressed;
-      /**if (isPressed)
-      player.run();
-      else
-      player.idle();
-      **/
+
     } else if (binding.equals("Right")) {
   
       right = isPressed;
-      /**if (isPressed)
-      player.run();
-      else
-      player.idle();
-      **/
       }
     if (binding.equals("Down")) {
       
       down = isPressed;
-      if (isPressed)
-      player.run();
-      else
-      player.idle();
+
     
     } else if (binding.equals("Up")) {
         
       up = isPressed;
-      if (isPressed)
-      player.run();
-      else
-      player.idle();
+
     }
         
   }
   
-  @Override
-  public void update(float tpf){
+  private void chaseMove(){
         camDir.set(this.app.getCamera().getDirection()).multLocal(10.0f, 0.0f, 10.0f);
         camLeft.set(this.app.getCamera().getLeft()).multLocal(10.0f);
         walkDirection.set(0, 0, 0);
@@ -146,9 +132,109 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             player.idle();
         }
         
-       player.playerPhys.setWalkDirection(walkDirection.mult(player.speedMult));
+       player.playerPhys.setWalkDirection(walkDirection.mult(1));
+       
+       if (!up && !down && !left && !right)
        player.playerPhys.setViewDirection(camDir);
-
+       else 
+       player.playerPhys.setViewDirection(walkDirection);
+       
+      }
+  
+  private void topDownMove(){
+        camDir.set(this.app.getCamera().getDirection()).multLocal(10.0f, 0.0f, 10.0f);
+        camLeft.set(this.app.getCamera().getLeft()).multLocal(10.0f);
+        walkDirection.set(0, 0, 0);
+        
+        int xMove = 0;
+        int zMove = 0;
+        
+        if (up) {
+            zMove = 5;
+        }
+        else if (down) {
+            zMove = -5;
+        }
+        
+        if (left) {
+            xMove = 5;
+        }
+        else if (right) {
+            xMove = -5;
+        
+        } 
+        
+        if(up||down||left||right) {
+            
+          player.run();
+            
+        } else {
+          player.idle();
+          }
+        
+       walkDirection.addLocal(xMove, 0, zMove); 
+        
+       player.playerPhys.setWalkDirection(walkDirection.mult(1));
+    }
+  
+  private void rotate(){
+      
+   InteractionManager inter = app.getStateManager().getState(InteractionManager.class);
+   boolean up    = inter.up;
+   boolean down  = inter.down;
+   boolean left  = inter.left;
+   boolean right = inter.right;
+    
+    if (up) {
+      
+      if (left) {
+        player.playerPhys.setViewDirection(new Vector3f(999,0,999));
+        }
+      
+      else if (right) {
+        player.playerPhys.setViewDirection(new Vector3f(-999,0,999));
+        }
+      
+      else {
+        player.playerPhys.setViewDirection(new Vector3f(0,0,999));
+        }
+      
+      }
+    
+    else if (down) {
+      
+      if (left) {
+        player.playerPhys.setViewDirection(new Vector3f(999,0,-999));
+        }
+      
+      else if (right) {
+        player.playerPhys.setViewDirection(new Vector3f(-999,0,-999));
+        }
+      
+      else {
+        player.playerPhys.setViewDirection(new Vector3f(0,0,-999));
+        } 
+        
+      }
+    
+    else if (left) {
+      player.playerPhys.setViewDirection(new Vector3f(999,0,0));
+      }
+    
+    else if (right){
+      player.playerPhys.setViewDirection(new Vector3f(-999,0,0));
+      }
+    }
+  
+  @Override
+  public void update(float tpf) {
+      
+    if (topDown) {
+    topDownMove();
+    rotate();
+    }
+    else    
+    chaseMove();
     }
   
   }
