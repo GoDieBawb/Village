@@ -177,54 +177,55 @@ public class InteractionManager extends AbstractAppState implements ActionListen
        player.playerPhys.setWalkDirection(walkDirection.mult(1));
     }
   
-  private void rotate(){
+  private void rotate() {
       
-   InteractionManager inter = app.getStateManager().getState(InteractionManager.class);
-   boolean up    = inter.up;
-   boolean down  = inter.down;
-   boolean left  = inter.left;
-   boolean right = inter.right;
+      InteractionManager inter = app.getStateManager().getState(InteractionManager.class);
+      boolean up    = inter.up;
+      boolean down  = inter.down;
+      boolean left  = inter.left;
+      boolean right = inter.right;
     
-    if (up) {
+      if (up) {
       
-      if (left) {
-        player.playerPhys.setViewDirection(new Vector3f(999,0,999));
-        }
+          if (left) {
+            player.playerPhys.setViewDirection(new Vector3f(999,0,999));
+          }
       
-      else if (right) {
-        player.playerPhys.setViewDirection(new Vector3f(-999,0,999));
-        }
+          else if (right) {
+              player.playerPhys.setViewDirection(new Vector3f(-999,0,999));
+          }
       
-      else {
-        player.playerPhys.setViewDirection(new Vector3f(0,0,999));
-        }
+          else {
+              player.playerPhys.setViewDirection(new Vector3f(0,0,999));
+          }
       
       }
     
-    else if (down) {
+      else if (down) {
       
-      if (left) {
-        player.playerPhys.setViewDirection(new Vector3f(999,0,-999));
-        }
+          if (left) {
+              player.playerPhys.setViewDirection(new Vector3f(999,0,-999));
+          }
       
-      else if (right) {
-        player.playerPhys.setViewDirection(new Vector3f(-999,0,-999));
-        }
+          else if (right) {
+              player.playerPhys.setViewDirection(new Vector3f(-999,0,-999));
+          }
       
-      else {
-        player.playerPhys.setViewDirection(new Vector3f(0,0,-999));
-        } 
+          else {
+              player.playerPhys.setViewDirection(new Vector3f(0,0,-999));
+          } 
         
       }
     
-    else if (left) {
-      player.playerPhys.setViewDirection(new Vector3f(999,0,0));
+      else if (left) {
+        player.playerPhys.setViewDirection(new Vector3f(999,0,0));
       }
     
-    else if (right){
-      player.playerPhys.setViewDirection(new Vector3f(-999,0,0));
-      }
-    }
+      else if (right){
+        player.playerPhys.setViewDirection(new Vector3f(-999,0,0));
+        }
+      
+  }
   
   @Override
   public void update(float tpf) {

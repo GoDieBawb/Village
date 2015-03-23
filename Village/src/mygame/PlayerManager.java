@@ -118,9 +118,15 @@ public class PlayerManager extends AbstractAppState {
 
     npcManager.initBlacksmith();
     
+    TextureKey key1     = new TextureKey("Models/Person/Farmer.png", true);
+    Texture tex1        = assetManager.loadTexture(key1);
+    Material mat1       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    
     Npc woodsMan = (Npc) npcManager.npcNode.getChild("Blacksmith");
     woodsMan.setName("Woodsman");
     woodsMan.npcPhys.warp(new Vector3f(25, 1.2f, 3f));
+    woodsMan.setMaterial(mat1);
+    mat1.setTexture("ColorMap", tex1);
     
     physics.getPhysicsSpace().add(player.playerPhys);
     player.playerPhys.warp(new Vector3f(-15, 1, -3));

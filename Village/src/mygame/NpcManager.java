@@ -107,7 +107,7 @@ public class NpcManager extends AbstractAppState {
   private void initInnKeeper(){
     Npc innKeeper      = new Npc();
     innKeeper.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
-    TextureKey key     = new TextureKey("Models/Person/Person.png", true);
+    TextureKey key     = new TextureKey("Models/Person/ShopKeeper.png", true);
     Texture tex        = assetManager.loadTexture(key);
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", tex);
@@ -203,7 +203,7 @@ public class NpcManager extends AbstractAppState {
   
   public void initChemist(){
     Npc chemist      = new Npc();
-    chemist.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
+    chemist.model    = (Node) assetManager.loadModel("Models/Person/ShopKeeper.j3o");
     TextureKey key   = new TextureKey("Models/Person/Person.png", true);
     Texture tex      = assetManager.loadTexture(key);
     Material mat     = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -243,7 +243,7 @@ public class NpcManager extends AbstractAppState {
   
   public void initBilly(){
     Npc billy      = new Npc();
-    billy.model    = (Node) assetManager.loadModel("Models/Person/Person.j3o");
+    billy.model    = (Node) assetManager.loadModel("Models/Person/Farmer.j3o");
     TextureKey key = new TextureKey("Models/Person/Person.png", true);
     Texture tex    = assetManager.loadTexture(key);
     Material mat   = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

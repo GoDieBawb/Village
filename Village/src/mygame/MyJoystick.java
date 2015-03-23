@@ -11,7 +11,15 @@ public abstract class MyJoystick extends Joystick implements TouchListener {
     public MyJoystick(ElementManager screen, Vector2f position, int size) {
         super(screen, position, size);
     }
- 
+
+    @Override
+    public void show() {
+        boolean isAndroid = "Dalvik".equals(System.getProperty("java.vm.name"));
+        if (!isAndroid)
+            return;
+        super.show();
+    }
+    
     @Override
     public void onTouchDown(TouchEvent evt) {
         evt.setConsumed();
