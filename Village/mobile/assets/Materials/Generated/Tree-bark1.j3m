@@ -1,14 +1,12 @@
 Material MyMaterial : Common/MatDefs/Light/Lighting.j3md {
     MaterialParameters {
-        Minnaert : false
         Specular : 1.0 1.0 1.0 1.0
         Diffuse : 0.64000005 0.64000005 0.64000005 1.0
         UseMaterialColors : true
         ParallaxHeight : 0.05
         Ambient : 0.0 0.0 0.0 1.0
         Shininess : 20.0
-        WardIso : false
-        DiffuseMap : Textures/Bark.jpg
+        DiffuseMap : Textures/Bark1.jpg
     }
     AdditionalRenderState {
       FaceCull Back

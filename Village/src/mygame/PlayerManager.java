@@ -34,7 +34,8 @@ public class PlayerManager extends AbstractAppState {
   private boolean           roofsAttached;
   
   @Override
-  public void initialize(AppStateManager stateManager, Application app){
+  public void initialize(AppStateManager stateManager, Application app) {
+      
     super.initialize(stateManager, app);
     this.app          = (SimpleApplication) app;
     this.stateManager = this.app.getStateManager();
@@ -42,16 +43,15 @@ public class PlayerManager extends AbstractAppState {
     this.physics      = this.stateManager.getState(SceneManager.class).physics;
     this.roofNode     = this.stateManager.getState(SceneManager.class).roofNode;
     initPlayer();
-    }
+    
+  }
   
   private void initPlayer(){
+      
     player             = new Player();
     player.model       = (Node) assetManager.loadModel("Models/Person/Person.j3o");
-    player.animControl = player.model.getChild("Person").getControl(AnimControl.class);
-    player.armChannel  = player.animControl.createChannel();
-    player.legChannel  = player.animControl.createChannel();
     player.playerPhys  = new BetterCharacterControl(.4f, 1.3f, 100f);
-    
+    player.animControl = player.model.getChild("Person").getControl(AnimControl.class);
     TextureKey key     = new TextureKey("Models/Person/Person.png", true);
     Texture tex        = assetManager.loadTexture(key);
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -60,15 +60,11 @@ public class PlayerManager extends AbstractAppState {
 
     player.addControl(player.playerPhys);
     
-    player.armChannel.addFromRootBone("TopSpine");
-    player.legChannel.addFromRootBone("BottomSpine");
-    player.armChannel.setAnim("ArmIdle");
-    player.legChannel.setAnim("LegsIdle");
+    player.initAnimations();
     
     physics.getPhysicsSpace().add(player.playerPhys);
     player.playerPhys.setGravity(new Vector3f(0, -20.81f, 0));
     player.playerPhys.warp(new Vector3f(new Vector3f(45, 1, 38)));
-    //player.playerPhys.warp(new Vector3f(new Vector3f(26, 1, -3)));
     player.scale(.3f, .35f, .3f);
     player.model.setMaterial(mat);
     player.attachChild(player.model);
@@ -76,8 +72,12 @@ public class PlayerManager extends AbstractAppState {
     
     player.level = 1;
     player.questStep = "Start";
+    player.questStep = "isDone";
     this.app.getRootNode().attachChild(player);
-    }
+    
+  }
+  
+
   
   private void initLevelTwo(){
       
@@ -101,13 +101,18 @@ public class PlayerManager extends AbstractAppState {
     
     mat.setTexture("ColorMap", tex);
     player.model.setMaterial(mat);
-    player.questStep = "Start";
+    
+    player.questStep = "FindAxe";
     
     stateManager.getState(GuiManager.class).delayAlert("Work to do", "You've finally arrived...", 2);
     stateManager.getState(AudioManager.class).playSong(2);
-    }
+    
+    player.initAnimations();
+    
+  }
   
-  public void initLevelThree(){
+  public void initLevelThree() {
+      
     app.getRootNode().detachAllChildren();
     app.getRootNode().attachChild(player);
     
@@ -144,7 +149,8 @@ public class PlayerManager extends AbstractAppState {
     
     stateManager.getState(GuiManager.class).delayAlert("Lost", "You're lost in the woods... ", 2);
     stateManager.getState(AudioManager.class).playSong(1);
-    }
+    
+  }
   
   public void initLevelFour(){
       
@@ -174,77 +180,92 @@ public class PlayerManager extends AbstractAppState {
     
     stateManager.getState(GuiManager.class).delayAlert("Final Task", "You arrive in a village...", 2);
     stateManager.getState(AudioManager.class).playSong(1);
-    }
+    
+  }
   
   private void playerFallCheck(){
     
-    if (player.level == 1)  
+    if (player.level == 1) {
     
-    if (player.questStep.equals("isDone")){
-      initLevelTwo();
+      if (player.questStep.equals("isDone")) {
+        initLevelTwo();
+      } 
+    
+      else {
+        player.playerPhys.warp(new Vector3f(45, 1, 38));
+        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+      }
+    
+    }
+  
+    if (player.level == 2) {
         
-      } else {
-      player.playerPhys.warp(new Vector3f(45, 1, 38));
-      stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
-      }
-      
-      if (player.level == 2)
-      
       if (player.questStep.equals("LeftHouse")) {
-      initLevelThree();   
+        initLevelThree();   
+      } 
       
-      } else {
-      stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
-      player.playerPhys.warp(new Vector3f(new Vector3f(-15, 1, -3))); 
+      else {
+        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+        player.playerPhys.warp(new Vector3f(new Vector3f(-15, 1, -3))); 
       }
-      
-      if (player.level == 3){
-        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
-        player.playerPhys.warp(new Vector3f(-15, 1, -3));
-        }
-
-      if (player.level == 4){
-        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
-        player.playerPhys.warp(new Vector3f(6, 5, -75));
-        }
       
     }
+    
+    if (player.level == 3) {
+        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+        player.playerPhys.warp(new Vector3f(-15, 1, -3));
+    }
+
+    if (player.level == 4){
+        stateManager.getState(GuiManager.class).showAlert("No Escape", "As you jump off the edge awaiting the sweet escape of death, you find yourself back where you started...");
+        player.playerPhys.warp(new Vector3f(6, 5, -75));
+    }
+      
+  }
   
   private void roofChecker() {
       
     if (player.isInside(stateManager)) {
+        
       if (roofsAttached)
-      roofNode.removeFromParent();
-      roofsAttached = false;  
-      }
+        roofNode.removeFromParent();
+      
+      roofsAttached = false; 
+      
+    }
     
     else {
+        
         if (!roofsAttached)
-        app.getRootNode().attachChild(roofNode);
+            app.getRootNode().attachChild(roofNode);
+
         roofsAttached = true;
-        }
     
     }
+    
+  }
   
   @Override
   public void update(float tpf){
     
     //Checks if the player is inside if so remove the roof  
-    if (stateManager.getState(InteractionManager.class).topDown)  
-    roofChecker();
+    if (stateManager.getState(InteractionManager.class).topDown)  {
+        roofChecker();
+    }
+    
     else if (!roofsAttached) {
       app.getRootNode().attachChild(roofNode);
       roofsAttached = true;  
-      }
+    }
         
       
     //Swing Check
     if (player.hasSwung && System.currentTimeMillis()/1000 - player.lastSwing > .1)
-    player.hasSwung = false;
+        player.hasSwung = false;
     
     //Check for the player jumping off the edge. A series of checks for level and step
     if (player.getWorldTranslation().y < -5)
-    playerFallCheck();
+        playerFallCheck();
     
     }
   

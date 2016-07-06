@@ -44,23 +44,26 @@ public class CameraManager extends AbstractAppState {
     cam.setDefaultVerticalRotation(.145f);
     cam.setMaxVerticalRotation(.145f);
     cam.setMinVerticalRotation(.145f);
-    }
+  }
   
   private void chaseCamMove() {
-    if (cam.getDistanceToTarget() < 1){
-    cam.setMinVerticalRotation(0f);
-    cam.setMaxVerticalRotation(5f);
+    
+      if (cam.getDistanceToTarget() < 1){
+        cam.setMinVerticalRotation(0f);
+        cam.setMaxVerticalRotation(5f);
     }
+    
     else {
-    cam.setMaxVerticalRotation(.145f);
-    cam.setMinVerticalRotation(.145f); 
+        cam.setMaxVerticalRotation(.145f);
+        cam.setMinVerticalRotation(.145f); 
     }
-    }
+    
+  }
   
   private void topDownCamMove(){
     app.getCamera().setLocation(player.getLocalTranslation().addLocal(0,30,0));
     app.getCamera().lookAt(player.getLocalTranslation().multLocal(1,0,1), new Vector3f(0,1,0));
-    }
+  }
   
   @Override 
   public void update(float tpf) {
@@ -68,15 +71,19 @@ public class CameraManager extends AbstractAppState {
     boolean topDown = stateManager.getState(InteractionManager.class).topDown;
     
     if (topDown) {
-    topDownCamMove();
-    cam.setEnabled(false);
+        topDownCamMove();
+        cam.setEnabled(false);
     }
     
     else {   
-    chaseCamMove();
-    if (!cam.isEnabled())
-    cam.setDragToRotate(false);    
-    cam.setEnabled(true);
+        
+        chaseCamMove();
+        
+        if (!cam.isEnabled())
+            cam.setDragToRotate(false);   
+        
+        cam.setEnabled(true);
+        
     }
     
     }

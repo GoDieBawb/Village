@@ -32,36 +32,43 @@ public class Player extends Node {
     
   public void swing(AppStateManager stateManager) {
     
-    if (!hasSwung){
-    armChannel.setAnim("ArmSwing");
-    armChannel.setSpeed(2);
-    armChannel.setLoopMode(LoopMode.DontLoop);
-    lastSwing = System.currentTimeMillis()/1000;
-    hasSwung  = true;
+    if (!hasSwung) {
+        
+        armChannel.setAnim("ArmSwing");
+        armChannel.setSpeed(2);
+        armChannel.setLoopMode(LoopMode.DontLoop);
+        lastSwing = System.currentTimeMillis()/1000;
+        hasSwung  = true;
     
-    
-    Node itemNode = (Node) stateManager.getState(SceneManager.class).scene.getParent().getChild("ItemNode");
-    CollisionResults results = new CollisionResults();
-    itemNode.collideWith(this.model.getWorldBound(), results);
+        Node itemNode = (Node) stateManager.getState(SceneManager.class).scene.getParent().getChild("ItemNode");
+        CollisionResults results = new CollisionResults();
+        itemNode.collideWith(this.model.getWorldBound(), results);
           
-    if (results.size() > 0)
-    getItem(results, stateManager);
+        if (results.size() > 0)
+            getItem(results, stateManager);
     
-    else
-    stateManager.getState(GuiManager.class).showAlert("Interact", "Nothing interesting here...");
+        else
+            stateManager.getState(GuiManager.class).showAlert("Interact", "Nothing interesting here...");
     
     }
+    
   }
   
   private void getItem(CollisionResults results, AppStateManager stateManager) {
-    if (level == 4)
-    getLevelFourItems(results, stateManager);    
-    else if (level == 3)
-    getLevelThreeItems(results, stateManager); 
-    else if (level == 2)
-    getLevelTwoItems(results, stateManager);
-    else
-    getLevelOneItems(results, stateManager);
+      switch (level) {
+          case 4:
+              getLevelFourItems(results, stateManager);
+              break;
+          case 3:
+              getLevelThreeItems(results, stateManager);
+              break;
+          case 2:
+              getLevelTwoItems(results, stateManager);
+              break;
+          default:
+              getLevelOneItems(results, stateManager);
+              break;
+      }
     }  
   
   private void getLevelFourItems(CollisionResults results, AppStateManager stateManager){
@@ -404,64 +411,70 @@ public class Player extends Node {
       if (questStep.equals("FindAxe")){
         gui.showAlert(item.getName(), "The door is boarded up tightly..."); 
        
-        } else {
+      } 
+      
+      else if (questStep.equals("ChopDoor")) {
         gui.showAlert(item.getName(), "You chop the planks off the door...");
         stateManager.getState(SceneManager.class).scene.getChild("Board").removeFromParent();
         questStep = "OpenDoor";
-        }
-      
       }
+      
+      else{
+        gui.showAlert(item.getName(), "The door is boarded up tightly..."); 
+      }       
+      
+    }
 
-    if (item.getName().equals("Door")){
+    if (item.getName().equals("Door")) {
         
     if (questStep.equals("FindAxe")){
       gui.showAlert(item.getName(), "The door is boarded up tightly...");    
-      }
+    }
       
     else if (questStep.equals("ChopDoor")){
       gui.showAlert(item.getName(), "You chop the planks off the door...");
       stateManager.getState(SceneManager.class).scene.getChild("Board").removeFromParent();
       questStep = "OpenDoor";
-      }
+    }
 
     else if (questStep.equals("OpenDoor")){
       playerPhys.warp(new Vector3f(new Vector3f(-5, 1, -3)));
       stateManager.getState(GuiManager.class).showAlert("Reaper", "You close the door behind you...");
       stateManager.getState(AudioManager.class).playSound("Door");
       questStep = "FindScythe";
-       }
+    }
         
       else if (questStep.equals("FindScythe")){
         gui.showAlert(item.getName(), "You still have work to do...");
-        }
+      }
       
       if (questStep.equals("Murder")){
         gui.showAlert(item.getName(), "You still have work to do...");
-        }
+      }
       
       if (questStep.equals("FindCrate")){
         gui.showAlert(item.getName(), "You must hide the body...");
-        }
+      }
 
       if (questStep.equals("FindSaw")){
         gui.showAlert(item.getName(), "You must hide the body...");
-        }
+      }
 
       if (questStep.equals("HideBody")){
         gui.showAlert(item.getName(), "You must hide the body...");
-        }
+      }
 
       if (questStep.equals("LeaveHouse")){
         gui.showAlert(item.getName(), "As you leave the house... You feel like you're not the same as when you walked in...");
         playerPhys.warp(new Vector3f(new Vector3f(-7, 1, -3)));
         questStep = "LeftHouse";
-        }
+      }
       
       if (questStep.equals("LeftHouse")){
         gui.showAlert(item.getName(), "You don't to go back in there...");
-        }
-      
       }
+      
+    }
 
     if (item.getName().equals("Painting")){
       gui.showAlert(item.getName(), "A quite interesting painting...");  
@@ -576,30 +589,45 @@ public class Player extends Node {
     }
   }  
   
-  public void run(){
-    if (!armChannel.getAnimationName().equals("ArmRun") && !hasSwung){
-      armChannel.setAnim("ArmRun");
-      }
-    
-    if (!legChannel.getAnimationName().equals("LegRun")){
-      legChannel.setAnim("LegRun");
-      }
-    
+  public void run() {
+      
+    if (!armChannel.getAnimationName().equals("ArmRun") && !hasSwung) {
+        System.out.println("RUN");
+        armChannel.setAnim("ArmRun");
     }
+    
+    if (!legChannel.getAnimationName().equals("LegRun")) {
+      legChannel.setAnim("LegRun");
+    }
+    
+  }
   
   public void idle(){
 
     if (!armChannel.getAnimationName().equals("ArmIdle") && !hasSwung){
+        System.out.println("IDLE");
       armChannel.setAnim("ArmIdle");
-      }
+    }
     
     if (!legChannel.getAnimationName().equals("LegsIdle")){
       legChannel.setAnim("LegsIdle");
-      }
-    
     }
+    
+  }
   
-public boolean isInside(AppStateManager stateManager) {
+  public void initAnimations() {
+
+    animControl.clearChannels();
+    armChannel  = animControl.createChannel();
+    legChannel  = animControl.createChannel();
+    armChannel.addFromRootBone("TopSpine");
+    legChannel.addFromRootBone("BottomSpine");
+    armChannel.setAnim("ArmIdle");
+    legChannel.setAnim("LegsIdle");
+    
+  }  
+  
+  public boolean isInside(AppStateManager stateManager) {
     boolean isInside         = false;
     CollisionResults results = new CollisionResults();
     Ray ray                  = new Ray(getLocalTranslation(), new Vector3f(0,1,0));

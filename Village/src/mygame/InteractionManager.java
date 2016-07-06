@@ -64,40 +64,48 @@ public class InteractionManager extends AbstractAppState implements ActionListen
     inputManager.addListener(this, "Space");
     }
 
+  @Override
   public void onAction(String binding, boolean isPressed, float tpf) {
     
     if (binding.equals("Inventory")) {
+        
       inv = isPressed;
+      
       if (isPressed){
-      inputManager.setCursorVisible(true);
-      stateManager.getState(CameraManager.class).cam.setDragToRotate(true);
+        inputManager.setCursorVisible(true);
+        stateManager.getState(CameraManager.class).cam.setDragToRotate(true);
       }
+      
       else {
       inputManager.setCursorVisible(false);
       stateManager.getState(CameraManager.class).cam.setDragToRotate(false);
       }
+      
     }
       
     if (binding.equals("Space") && !isPressed) {
       
       if (!player.hasSwung)
-      player.swing(stateManager);
-      }
+        player.swing(stateManager);
+    
+    }
 
     if (binding.equals("Left")) {
-        
       left = isPressed;
-
-    } else if (binding.equals("Right")) {
-  
+    } 
+    
+    else if (binding.equals("Right")) {
       right = isPressed;
-      }
+    }
+    
     if (binding.equals("Down")) {
       
       down = isPressed;
 
     
-    } else if (binding.equals("Up")) {
+    } 
+    
+    else if (binding.equals("Up")) {
         
       up = isPressed;
 
@@ -132,12 +140,13 @@ public class InteractionManager extends AbstractAppState implements ActionListen
             player.idle();
         }
         
-       player.playerPhys.setWalkDirection(walkDirection.mult(1));
+        player.playerPhys.setWalkDirection(walkDirection.mult(1));
        
-       if (!up && !down && !left && !right)
-       player.playerPhys.setViewDirection(camDir);
-       else 
-       player.playerPhys.setViewDirection(walkDirection);
+        if (!up && !down && !left && !right)
+            player.playerPhys.setViewDirection(camDir);
+        
+        else 
+            player.playerPhys.setViewDirection(walkDirection);
        
       }
   

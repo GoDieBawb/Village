@@ -50,7 +50,7 @@ public class GuiManager extends AbstractAppState {
     player            = stateManager.getState(PlayerManager.class).player;
     screen            = new Screen(app, "tonegod/gui/style/atlasdef/style_map.gui.xml");
     screen.setUseTextureAtlas(true,"tonegod/gui/style/atlasdef/atlas.png");
-    screen.setUseMultiTouch(true);
+    //screen.setUseMultiTouch(true);
     this.app.getGuiNode().addControl(screen);
     this.app.getInputManager().setSimulateMouse(true);
     initInteractButton();
@@ -58,6 +58,7 @@ public class GuiManager extends AbstractAppState {
     
     initJoyStick();
     initEyeButton();
+    
     }
   
   private void initInteractButton(){
@@ -123,66 +124,72 @@ public class GuiManager extends AbstractAppState {
             if (deltaX < -dzVal) {
               stateManager.getState(InteractionManager.class).left  = true;
               stateManager.getState(InteractionManager.class).right = false;
-              } 
+            } 
             
             else if (deltaX > dzVal) {
               stateManager.getState(InteractionManager.class).right = true;
               stateManager.getState(InteractionManager.class).left  = false;
-              }
+            }
             
             else {
               stateManager.getState(InteractionManager.class).right = false;
               stateManager.getState(InteractionManager.class).left  = false; 
-              }
+            }
             
         
             if (deltaY < -dzVal) {
               stateManager.getState(InteractionManager.class).down = true;
               stateManager.getState(InteractionManager.class).up   = false;
-              } 
+            } 
             
             else if (deltaY > dzVal) {
               stateManager.getState(InteractionManager.class).down = false;
               stateManager.getState(InteractionManager.class).up   = true;
-              }
+            }
             
             else {
               stateManager.getState(InteractionManager.class).up   = false;
               stateManager.getState(InteractionManager.class).down = false;    
-              }
+            }
             
-          player.speedMult = FastMath.abs(deltaY);
+            player.speedMult = FastMath.abs(deltaY);
+          
           }
-        };
-      // getGUIRegion returns region info “x=0|y=0|w=50|h=50″, etc
-      TextureKey key = new TextureKey("Textures/barrel/D.png", false);
-      Texture tex = assetManager.loadTexture(key);
-      stick.setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
-      stick.getThumb().setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
-      screen.addElement(stick, true);
-      stick.setPosition(screen.getWidth()/10 - stick.getWidth()/2, screen.getHeight() / 10f - interactButton.getHeight()/5);
-      // Add some fancy effects
-      Effect fxIn = new Effect(Effect.EffectType.FadeIn, Effect.EffectEvent.Show,.5f);
-      stick.addEffect(fxIn);
-      Effect fxOut = new Effect(Effect.EffectType.FadeOut, Effect.EffectEvent.Hide,.5f);
-      stick.addEffect(fxOut);
-      stick.show();
-      }
+    
+    };
+    
+    // getGUIRegion returns region info “x=0|y=0|w=50|h=50″, etc
+    TextureKey key = new TextureKey("Textures/barrel/D.png", false);
+    Texture tex = assetManager.loadTexture(key);
+    stick.setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
+    stick.getThumb().setTextureAtlasImage(tex, "x=20|y=20|w=120|h=35");
+    screen.addElement(stick, true);
+    stick.setPosition(screen.getWidth()/10 - stick.getWidth()/2, screen.getHeight() / 10f - interactButton.getHeight()/5);
+    // Add some fancy effects
+    Effect fxIn = new Effect(Effect.EffectType.FadeIn, Effect.EffectEvent.Show,.5f);
+    stick.addEffect(fxIn);
+    Effect fxOut = new Effect(Effect.EffectType.FadeOut, Effect.EffectEvent.Hide,.5f);
+    stick.addEffect(fxOut);
+    stick.show();
+      
+  }
   
   private void initEyeButton(){
 
     eyeButton = new ButtonAdapter( screen, "EyeButton", new Vector2f(15, 15) ) {
     
-    @Override
+      @Override
       public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
         
         if (stateManager.getState(InteractionManager.class).topDown)
-        stateManager.getState(InteractionManager.class).topDown = false;
+            stateManager.getState(InteractionManager.class).topDown = false;
+        
         else
-        stateManager.getState(InteractionManager.class).topDown = true;
+            stateManager.getState(InteractionManager.class).topDown = true;
         
         }
-      };
+    };
+    
     
     eyeButton.setMaterial(assetManager.loadMaterial("Materials/Paper.j3m"));
     eyeButton.setDimensions(screen.getWidth()/8, screen.getHeight()/10);
@@ -191,7 +198,7 @@ public class GuiManager extends AbstractAppState {
     eyeButton.setText("w");
     screen.addElement(eyeButton);      
       
-    }
+  }
   
   @Override
   public void update(float tpf){

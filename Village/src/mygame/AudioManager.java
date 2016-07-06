@@ -36,13 +36,17 @@ public class AudioManager extends AbstractAppState {
     }
   
   private void initAudio(){
+      
+    
     music1 = new AudioNode(assetManager, "Sounds/Song.ogg", false);
     music1.setLooping(true);
     music1.setPositional(false);
     music1.setVolume(.1f);
     this.app.getRootNode().attachChild(music1);
-
-    music2 = new AudioNode(assetManager, "Sounds/Song2.ogg", false);
+    
+    
+    //music2 = new AudioNode(assetManager, "Sounds/Song2.ogg", false);
+    music2 = new AudioNode(assetManager, "Sounds/Song.ogg", false);
     music2.setLooping(true);
     music2.setPositional(false);
     music2.setVolume(.1f);
@@ -60,16 +64,17 @@ public class AudioManager extends AbstractAppState {
     doorSound.setPositional(false);
     doorSound.setVolume(.1f);
     this.app.getRootNode().attachChild(doorSound);
-    }
+  
+  }
   
   public void playSong(int song){
       
     if (song == 1){
-    music2.stop();
-    music1.play();
+        music2.stop();
+        music1.play();
     } else {
-    music1.stop();
-    music2.play();
+        music1.stop();
+        music2.play();
     }
     
     }
