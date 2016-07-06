@@ -4,7 +4,6 @@
  */
 package mygame;
 
-import com.jme3.animation.AnimControl;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -51,7 +50,7 @@ public class PlayerManager extends AbstractAppState {
     player             = new Player();
     player.model       = (Node) assetManager.loadModel("Models/Person/Person.j3o");
     player.playerPhys  = new BetterCharacterControl(.4f, 1.3f, 100f);
-    player.animControl = player.model.getChild("Person").getControl(AnimControl.class);
+
     TextureKey key     = new TextureKey("Models/Person/Person.png", true);
     Texture tex        = assetManager.loadTexture(key);
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -72,7 +71,7 @@ public class PlayerManager extends AbstractAppState {
     
     player.level = 1;
     player.questStep = "Start";
-    player.questStep = "isDone";
+    
     this.app.getRootNode().attachChild(player);
     
   }
@@ -100,7 +99,7 @@ public class PlayerManager extends AbstractAppState {
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     
     mat.setTexture("ColorMap", tex);
-    player.model.setMaterial(mat);
+    //player.model.setMaterial(mat);
     
     player.questStep = "FindAxe";
     
@@ -143,7 +142,7 @@ public class PlayerManager extends AbstractAppState {
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     
     mat.setTexture("ColorMap", tex);
-    player.model.setMaterial(mat);
+    //player.model.setMaterial(mat);
     
     player.questStep = "Start";
     
@@ -175,7 +174,7 @@ public class PlayerManager extends AbstractAppState {
     Material mat       = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     
     mat.setTexture("ColorMap", tex);
-    player.model.setMaterial(mat);
+    //player.model.setMaterial(mat);
     player.questStep = "Start";
     
     stateManager.getState(GuiManager.class).delayAlert("Final Task", "You arrive in a village...", 2);

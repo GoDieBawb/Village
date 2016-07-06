@@ -21,7 +21,7 @@ public class MainActivity extends AndroidHarness{
      */
  
     public MainActivity(){
-        //splashPicID = R.drawable.splash;
+        splashPicID = R.drawable.splash;
         // Set the application class to run
         appClass = "mygame.Main";
         // Try ConfigType.FASTEST; or ConfigType.LEGACY if you have problems

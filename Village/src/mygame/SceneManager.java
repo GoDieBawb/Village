@@ -46,7 +46,8 @@ public class SceneManager extends AbstractAppState{
     //addLight();
   }
   
-  private void initScene(){
+  private void initScene() {
+      
     scene               = (Node) assetManager.loadModel("Scenes/Village.j3o");
     RigidBodyControl scenePhys = new RigidBodyControl(0f);
     
@@ -54,11 +55,13 @@ public class SceneManager extends AbstractAppState{
     physics.getPhysicsSpace().add(scenePhys);
     
     this.app.getRootNode().attachChild(scene);
+    
   }
   
-  public void initSceneTwo(){
+  public void initSceneTwo() {
+      
     physics.getPhysicsSpace().removeAll(scene);
-    scene               = (Node) assetManager.loadModel("Scenes/SceneTwo.j3o");
+    scene                       = (Node) assetManager.loadModel("Scenes/SceneTwo.j3o");
     RigidBodyControl scenePhys = new RigidBodyControl(0f);
     
     scene.addControl(scenePhys);
@@ -66,6 +69,7 @@ public class SceneManager extends AbstractAppState{
     
     this.app.getRootNode().attachChild(scene);
     makeUnshaded();
+    
   }
   
   public void initSceneThree(){

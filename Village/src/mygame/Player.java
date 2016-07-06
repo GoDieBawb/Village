@@ -592,7 +592,6 @@ public class Player extends Node {
   public void run() {
       
     if (!armChannel.getAnimationName().equals("ArmRun") && !hasSwung) {
-        System.out.println("RUN");
         armChannel.setAnim("ArmRun");
     }
     
@@ -605,7 +604,6 @@ public class Player extends Node {
   public void idle(){
 
     if (!armChannel.getAnimationName().equals("ArmIdle") && !hasSwung){
-        System.out.println("IDLE");
       armChannel.setAnim("ArmIdle");
     }
     
@@ -616,8 +614,14 @@ public class Player extends Node {
   }
   
   public void initAnimations() {
-
+      
+    animControl = model.getChild("Person").getControl(AnimControl.class);
+    
     animControl.clearChannels();
+    
+    animControl.setEnabled(true);
+    animControl.setSpatial(model.getChild("Person"));
+    
     armChannel  = animControl.createChannel();
     legChannel  = animControl.createChannel();
     armChannel.addFromRootBone("TopSpine");
