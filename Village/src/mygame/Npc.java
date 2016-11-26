@@ -276,15 +276,15 @@ public class Npc extends Node {
     if (player.questStep.equals("Start")){
       player.questStep = "getPoison";
       text = "There's a huge spider upstairs! Go get some poison from the chemist to kill it!";
-      }
+    }
     
     else if (player.questStep.equals("getPoison")){
       text = "Go get some poison from the chemist";    
-      }
+    }
 
     else {
       text = "I don't care what ingredients he needs just go get them!";      
-      }
+    }
     
     return text;
     }

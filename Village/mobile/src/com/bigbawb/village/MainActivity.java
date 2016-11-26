@@ -52,7 +52,7 @@ public class MainActivity extends AndroidHarness{
             
             adView = new AdView(this);
             adView.setAdSize(AdSize.SMART_BANNER);
-            adView.setAdUnitId("ca-app-pub-9434547190848397/6547624665");
+            adView.setAdUnitId("ca-app-pub-9434547190848397/8975012269");
             adView.buildLayer();
  
             LinearLayout ll = new LinearLayout(this);
